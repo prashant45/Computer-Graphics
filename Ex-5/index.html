@@ -1,0 +1,129 @@
+﻿
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./resources/css/print.css">
+
+    <meta name="lecture" content="Computer Graphics">
+    <meta name="exerciseNr" content="5">
+    <meta name="exercisePrefix" content="Exercise">
+    <meta name="term" content="Winter Term 2016/17">
+    <meta name="dueDate" content="November 21, 2016, 11:59 pm">
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script type="text/javascript" src="./resources/js/sheet.js"></script>
+
+    <script type="text/javascript" src="./BasicScripts/gl-matrix.js"></script>
+</head>
+
+
+<body>
+
+    <page size="A4">
+        <content>
+
+            <exercise prefix="Basic Exercises" title="Projections" points=10>
+                <task title="Projections 2D" points=7 submitfile="Basic1.js">
+
+                    <subtask title="Orthogonal Projection" points="1">
+                        <p>
+                            In this task you are asked to implement an orthogonal projection in 2D.
+                            Assume that the camera is aligned with the global coordinate system.
+                            The projection maps the 2D geometry onto a 1D line (the image plane).
+                            You have to implement <code>Basic1_1.OrthogonalProjection2D(point2D)</code>.
+                            As an argument, it gets a 2D point that has to be projected onto the image plane. The function returns the 1D coordinate on the image plane.
+                        </p>
+                        <canvas class="floatLeft" id="canvasBasic_1_1" width=600 height=300 data-call="Basic1_1.start" data-call-src="./BasicScripts/Basic1.js">
+                            <img class="wait">
+                        </canvas>
+                    </subtask>
+
+                    <subtask title="Perspective Projection" points="2">
+                        <p>
+                            In this task you are asked to implement a perspective projection in 2D.
+                            Assume that the camera is aligned with the global coordinate system.
+                            The projection maps the 2D geometry onto a 1D line (the image plane).
+                            You have to implement <code>Basic1_2.PerspectiveProjection2D(eye, imagePlane, point2D)</code>.
+                            In contrast to the previous assignment it also gets the position of the eye and the z-component of the image plane.
+                            Before projecting the point, you have to transform the point into the camera space (orgin is the eye position, axis are aligned to the world coordinate system).
+                            The function returns the 1D coordinate on the image plane.
+                        </p>
+                        <canvas class="floatLeft" id="canvasBasic_1_2" width=600 height=300 data-call="Basic1_2.start" data-call-src="./BasicScripts/Basic1.js">
+                            <img class="wait">
+                        </canvas>
+                    </subtask>
+
+                    <subtask title="Perspective Projection in Homogeneouse Coordinates" points="4">
+                        <p>
+                            From the previous assignment you know how a perspective projection works.
+                            As you know from the lecture, a perspective projection can be easily applied using homogeneous coordinates.
+                        </p>
+                        <p>
+                            In this task we have a freely movable camera.
+                            You can use the mouse to set a new camera center (eye).
+                            Using [ctrl] + mouse button you can change the point the camera looks at.
+                            Your task is now to implement the required methods to set up the camera matrix, the inverse camera matrix and the perspective transformation matrix
+                            (have a look at the <code>TODO</code>s in <code>Camera.prototype.update</code> and <code>mat3.perspective</code>).
+                            The camera matrix transforms a point from world space to camera space.
+                            The inverse camera matrix transforms a point from camera space to world space.
+                            Finally, you have to project a point given in world space coordinates to the canonical volume.
+                            Therefore, you have to implement the function <code>Camera.prototype.projectPoint</code>.
+                        </p>
+                        <canvas class="floatLeft" id="canvasBasic_1_3" width=600 height=300 data-call="Basic1_3.start" data-call-src="./BasicScripts/Basic1.js">
+                            <img class="wait">
+                        </canvas>
+                    </subtask>
+
+                </task>
+
+                <task title="Projections 3D" points=3 submitfile="Basic2.js">
+                    <p>
+                        In this task, you are asked to implement the 2D projection concept from the last task in 3D and set up a camera which projects the 3D space
+                        into 2D. The canvas below is split: On the left side, you can see the projection result, i.e. the image seen from the camera. On the right
+                        side, there is a debug view showing you both the observed scene (a colored cube in the middle of the coordinate system) and the frustum 
+                        belonging to the camera.
+                    </p>
+                    <p>
+                        <center>
+                            <canvas id="canvasProjection3D" width=600 height=300 data-call="Basic2.webGLStart" data-call-src="./BasicScripts/Basic2.js">
+                                <img class="wait">
+                                <shader id="shader-vs-cube" type="--vertex" src="./BasicScripts/shader_cube.vs"></shader>
+                                <shader id="shader-fs-cube" type="--fragment" src="./BasicScripts/shader_cube.fs"></shader>
+                                <shader id="shader-vs-line" type="--vertex" src="./BasicScripts/shader_line.vs"></shader>
+                                <shader id="shader-fs-line" type="--fragment" src="./BasicScripts/shader_line.fs"></shader>
+                            </canvas>
+                        </center>
+                    </p>
+                    <p>
+                        <center>
+                            Field of View: <input type="range" id="slider_fovy" min="10" max="50" step="1" value="30" onchange="Basic2.onChangeFovySlider(this.value);" />
+                        </center>
+                    </p>
+                    <p>
+                        The functions to be implemented are <code>Camera3D.prototype.update</code> and <code>mat4.perspective</code>, analogously to the two functions in 
+                        5.1c. Find the appropriate <code>TODO</code>s in the code and add code for the creation of the two matrices needed: First, set up the camera matrix in 
+                        <code>Camera3D.prototype.update</code>. Once you have completed this, you should see the camera frustum in the debug view on the right side. Second,
+                        set up the projection matrix in <code>mat4.perspective</code>. Once this matrix is correct, you should see the camera output in the view on the left side.
+                    </p>
+                    <p>
+                        As soon as you have finished the creation of the two matrices, you can enable interaction with the camera through setting <code>enableInteraction</code> to <code>true</code>. 
+                        You can move the camera within bounds, using the keys W (move camera forwards), S (move camera backwards), A (turn camera to the left) and D (turn camera to
+                        the right). The camera is always oriented towards the origin and therefore towards the cube. The opening angle of the camera can be adjusted using the slider below the canvas.
+                        The debug camera remains static during all of these changes so you can observe the effects on the camera frustum.
+                    </p>
+                </task>
+
+            </exercise>
+        </content>
+    </page>
+
+</body>
