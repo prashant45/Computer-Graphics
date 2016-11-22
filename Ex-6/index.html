@@ -1,0 +1,181 @@
+﻿
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./resources/css/print.css">
+
+    <meta name="lecture" content="Computer Graphics">
+    <meta name="exerciseNr" content="6">
+    <meta name="exercisePrefix" content="Exercise">
+    <meta name="term" content="Winter Term 2016/17">
+    <meta name="dueDate" content="November 28, 2016, 11:59 pm">
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script type="text/javascript" src="./resources/js/sheet.js"></script>
+
+    <script type="text/javascript" src="./BasicScripts/gl-matrix.js"></script>
+</head>
+
+
+<body>
+
+    <page size="A4">
+        <content>
+
+            <exercise prefix="Basic Exercises" title="Lighting & Shading" points=10>
+                <task title="Transformation of Normals" points=1 submitfile="Basic1.js">
+                    <p>
+                        In the fourth exercise, you learned about linear transformations such as scaling, rotation and shearing. Now you know the
+                        matrices needed to transform objects (for example the rectangle showed in the leftmost picture), it is time to consider
+                        the effect of linear transformations to the objects' normals which are needed for shading.
+                    </p>
+                    <p>
+                        The picture in the middle shows both the rectangle and the edge normals transformed with the same linear transformation,
+                        a shearing operation along the x axis. Obviously, the normals lose their defining behaviour when transformed with the
+                        shearing transformation: They are not perpendicular to the edges anymore.
+                    </p>
+                    <canvas class="floatRight" id="canvasBasic1" width=600 height=200 data-call="Basic1.start" data-call-src="./BasicScripts/Basic1.js">
+                        <img class="wait">
+                    </canvas>
+                    <p>
+                        Therefore, in order to transform normals correctly, you need to set up a new linear transformation stored in the so-called
+                        normal matrix. Find the creation of the normal matrix in the lecture, implement it
+                        in <code>Basic1.js</code> and achieve correct normals in the rightmost picture.
+                    </p>
+                </task>
+
+                <task title="Phong Lighting" points=2 submitfile="Basic2.js">
+                    <p>
+                        Phong Lighting approximates the illumination of a surface point $p$ seen from a position $eye$,
+                        assuming that the perceived color of the surface point is composed out of an ambient part,
+                        which tries to model the indirect light from the environment, a diffuse part and a specular part.
+                        Below you see the $eye$, the position of the point light source ($light$) and the surface.
+                        The surface is sampled at certain points. You can set a user specific sample using the left mouse button.
+                        Your task is to implement the Phong Lighting, therefore you have to implement the function <code>PhongLighting()</code>.
+                        Note: The light emitted from the light source is assumed to be white so that you can
+                        ignore the terms $I_{amb}$ and $I_{in}$ in the Phong formulae.
+                    </p>
+                    <p>
+                        <canvas id="canvasPhongLighting" width=600 height=300 data-call="Basic2_1.start" data-call-src="./BasicScripts/Basic2.js">
+                            <img class="wait">
+                        </canvas>
+                    </p>
+                    <p>
+                        You can adjust the number of samples shown above: <input type="range" id="nSamples" value="5" min="1" max="100" onchange="Basic2_1.onChangeNSamples(this.value);" />
+                    </p>
+                </task>
+                <task title="Shading" points=2 submitfile="Basic2.js">
+                    <p>
+                        As you know from the lecture, there are several shading methods.
+                        These methods describe ways to compute the color of illuminated surfaces.
+                        In this task we will have a look at Flat Shading and Gouraud Shading.
+                    </p>
+                    <p>
+                        Flat shading is the most simple method. It computes one color for one primitive (line in 2D, triangle in 3D).
+                    </p>
+                    <p>
+                        <canvas id="canvasFlatShading" width=600 height=300 data-call="Basic2_2.start" data-call-src="./BasicScripts/Basic2.js">
+                            <img class="wait">
+                        </canvas>
+                    </p>
+                    <p>
+                        You can adjust the number of line segments shown above: <input type="range" id="nLineSegments2_2" value="5" min="1" max="100" onchange="Basic2_2.onChangeNLineSegments(this.value);" />
+                    </p>
+                    <p>
+                        In contrast, Gouraud Shading computes the color at the vertices and interpolates the color linearly over the primitives.
+                    </p>
+                    <p>
+                        <canvas id="canvasGouraudShading" width=600 height=300 data-call="Basic2_3.start" data-call-src="./BasicScripts/Basic2.js">
+                            <img class="wait">
+                        </canvas>
+                    </p>
+                    <p>
+                        You can adjust the number of line segments shown above: <input type="range" id="nLineSegments2_3" value="5" min="1" max="100" onchange="Basic2_3.onChangeNLineSegments(this.value);" />
+                    </p>
+                </task>
+
+                <task title="Phong Shading in 3D" points=4>
+                    <img id="height_field" width=298 height=212 src='./resources/pm_heightfield.png' style="display:none"/>
+                    <fieldset class="floatRight">
+                        <p>
+                            <input type=checkbox name="lightRotation" value="true" checked onchange="Basic3.onChangeLightRotation();" /> light rotation
+                        </p>
+                        <p>
+                            $n_{shiny}$: <input type="range" id="shiny" value="100" min="10" max="1000" onchange="Basic3.onChangeShiny(this.value);" />
+                        </p>
+                        <p>
+                            <input type=checkbox name="phongTerm" value="true" checked onchange="Basic3.onChangePhongTerms(0);" /> ambient term
+                        </p>
+                        <p>
+                            <input type=checkbox name="phongTerm" value="true" onchange="Basic3.onChangePhongTerms(1);" /> diffuse term
+                        </p>
+                        <p>
+                            <input type=checkbox name="phongTerm" value="true" onchange="Basic3.onChangePhongTerms(2);" /> specular term
+                        </p>
+                    </fieldset>
+                    <p>
+                        In this task, you should implement Phong Lighting on a 3D terrain. The Phong Lighting model consists of three terms: the ambient,
+                        diffuse and specular term. Right now, the terrain is only shaded with the constant ambient term, which results in an image difficult
+                        to interpret: Every pixel of the terrain has the same color and you can hardly see the two hills and the two valleys of the terrain.
+                        It is your task to add diffuse and specular term to make the scene look more realistic.
+                    </p>
+                    <p>
+                        Unlike in the last task, you should not perform Flat or Gouraud Shading: To make the hills and valleys look good, you should 
+                        implement Phong Shading. Therefore, you should not interpolate colors, but normals and positions. Using them in the fragment 
+                        shader for lighting computations, you can determine colors on a per-fragment basis.
+                    </p>
+                    <center>
+                        <canvas id="canvasShading3D" width=600 height=600 data-call="Basic3.webGLStart" data-call-src="./BasicScripts/Basic3.js">
+                            <img class="wait">
+                            <shader id="shader-vs-phong" type="--vertex" src="./BasicScripts/shader_phong.vs"></shader>
+                            <shader id="shader-fs-phong" type="--fragment" src="./BasicScripts/shader_phong.fs"></shader>
+                            <shader id="shader-vs-light" type="--vertex" src="./BasicScripts/shader_light.vs"></shader>
+                            <shader id="shader-fs-light" type="--fragment" src="./BasicScripts/shader_light.fs"></shader>
+                        </canvas>
+                    </center>
+                    </p>
+                    <subtask title="Diffuse Term" points="2" submitfile="shader_phong.vs, shader_phong.fs">
+                        <p>
+                            Follow the instructions in <code>shader_phong.vs</code> and <code>shader_phong.fs</code> to
+                            produce the diffuse part of the illumination. Once you are done, you will be able to recognize the
+                            hills and valleys by the illumination changes when the light source moves over the terrain.
+                        </p>
+                    </subtask>
+                    <subtask title="Specular Term" points="2" submitfile="shader_phong.fs">
+                        <p>
+                            Follow the instructions in <code>shader_phong.fs</code> to produce the specular part of the illumination.
+                            Once you are done, you can experiment with this view-dependent part of the illumination. Use the keys A
+                            and D to turn around the camera and see how the specular reflections move. This effect can be observed
+                            better when the light source movement is turned off. You can control the shininess of the surface by using
+                            the slider.
+                        </p>
+                    </subtask>
+                </task>
+
+                <task title="Comparison of Flat, Gouraud and Phong Shading" points=1 submitfile="Basic.txt">
+                    <p>
+                        Use the sliders from Task 6.3 to test some very small numbers of line segments (between 1 and 5, for example).
+                        Which effect do you observe regarding the specular highlight in the middle?
+                    </p>
+                    <p>
+                        Why does this problem not occur in the case of Phong Shading (see Task 6.4)?
+                    </p>
+                    <p>
+                        <object width="100%" type="text/plain" data="./BasicScripts/Basic.txt" border="1"></object>
+                    </p>
+                </task>
+
+            </exercise>
+        </content>
+    </page>
+
+</body>
