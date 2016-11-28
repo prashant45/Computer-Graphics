@@ -14,9 +14,13 @@ uniform bool specular;
 //				the same name as in the vertex
 //				shader to pass the normal.
 
+
 // TODO 6.3a)	Define a varying variable with
 //				the same name as in the vertex
 //				shader to pass the position.
+
+varying vec3 frag_Normal;
+varying vec3 worldPos;
 
 
 void main(void)
@@ -46,7 +50,12 @@ void main(void)
 	//				normalized. Note that the varying variables
 	//				normalized in the vertex shader do not have
 	//				to be still normalized in the fragment shader.
-	color_diffuse = vec3(0);
+	
+	vec3 n = (frag_Normal);
+	vec3 l = normalize(lightPosition - worldPos);
+	vec3 r = normalize( 2.0 * dot(n, l) * n - l);
+	
+	color_diffuse = k_diff * dot(n, l);
 	
 	/////////////////////////////////
 	////////  specular term  ////////
@@ -61,12 +70,17 @@ void main(void)
 	//				position in camera space (easy!) to world space
 	//				using the inverse camera matrix given as a 
 	//				uniform.
-	color_specular = vec3(0);
+	
+	vec3 camera_pos = vec3(cameraMatrixInverse * vec4(worldPos, 0.0));
+	vec3 v = -normalize(camera_pos - worldPos);
+	
+	color_specular = k_spec * pow(dot(v, r), shiny);
 
 	///////////////////////////////////
     ////////  resulting color  ////////
     ///////////////////////////////////
-	vec3 color_result = vec3(0);
+	vec3 color_result = color_ambient + color_diffuse + color_specular;
+	
     if(ambient) color_result += color_ambient;
     if(diffuse) color_result += color_diffuse;
     if(specular) color_result += color_specular;

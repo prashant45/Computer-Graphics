@@ -94,14 +94,14 @@ var Basic1 = function () {
         // TODO:    Build up the normal transformation corresponding 
         //          to the linear transformation stored in linearTransf. 
         //          Replace the following dummy line.
-		var normal_mtrix = new LinearTransformation(mat2.create());
-		mat2.transpose(normal_mtrix, linearTransf);
-		mat2.invert(normal_mtrix, linearTransf);
-        return normal_mtrix;
 
-
-
-    }
+		var normal_Matrix = mat2.create();
+		
+		mat2.invert(normal_Matrix, linearTransf.A);
+		mat2.transpose(normal_Matrix, normal_Matrix);
+		
+		return new LinearTransformation(normal_Matrix);
+	}
 
     function ShearingX(shearX) {
         return new LinearTransformation([1.0, shearX, 0.0, 1.0]);
