@@ -1,0 +1,210 @@
+﻿
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./resources/css/print.css">
+
+    <meta name="lecture" content="Computer Graphics">
+    <meta name="exerciseNr" content="7">
+    <meta name="exercisePrefix" content="Exercise">
+    <meta name="term" content="Winter Term 2016/17">
+    <meta name="dueDate" content="December 5, 2016, 11:59 pm">
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script type="text/javascript" src="./resources/js/sheet.js"></script>
+
+    <script type="text/javascript" src="./BasicScripts/gl-matrix.js"></script>
+</head>
+
+
+<body>
+
+    <page size="A4">
+        <content>
+
+            <exercise prefix="Basic Exercises" title="Textures" points=10>
+                <task title="Bilinear Interpolation / MIP Mapping" points=4 submitfile="Basic1.js">
+                    <subtask title="Bilinear Interpolation" points=1 submitfile="Basic1.js">
+                        <p>
+                            From AlgoKS you already know bilinear interpolation.
+                            Bilinear interpolation is very important in the context of textures.
+                            We want you to implement the bilinear sampling method <code>Basic0.sampleBilinear</code>.
+                            Follow the instructions in the source code. Make use of the given helper functions.
+                        </p>
+                        <p>
+                            <center>
+                                <canvas id="canvasBasic0" width=400 height=200 data-call="Basic0.start" data-call-src="./BasicScripts/Basic1.js">
+                                    <img class="wait">
+                                </canvas>
+                            </center>
+                         </p>
+                    </subtask>
+
+                    <subtask title="MIP Mapping" points=3 submitfile="Basic1.js">
+                        <p>
+                            This assigment is about <b>MIP Mapping</b>.
+                            The first task is to build the MIP map pyramid.
+                            Follow the instructions in the constructor <code>MipMap(texture1D, nLevelMax)</code>.
+                            After implementation you should see the level below the surface in the canvas below.
+                            We now want to use the MIP map pyramid to set the colors of the pixels in the image plane.
+                            Currently we always use the finest level of the pyramid.
+                            You have to adapt the code in <code>Render()</code> accordingly (see <code>TODO</code>).
+                            The idea is to compute the footprint of a pixel in the texture.
+                            If the footprint is larger than the texel size of a level, we want to use a coarser level.
+                            The footprint of a pixel can be computed by the distance of the top and bottom texture coordinate of the pixel (These coordinates are already computed, see comments in the source code!).
+                        </p>
+                        <canvas class="floatRight" id="canvasBasic1" width=600 height=300 data-call="Basic1.start" data-call-src="./BasicScripts/Basic1.js">
+                            <img class="wait">
+                        </canvas>
+                        <p>
+                            You can adjust the number of pixels on the image plane shown above: <input type="range" id="nPixels" value="2" min="1" max="10" onchange="Basic1.onChangeNPixels(this.value);" />
+                        </p>
+                    </subtask>
+                </task>
+
+                <task title="Perspective Contortion" points=2 submitfile="Basic2.js, Basic2.txt">
+                    <p>
+                        This assignment will give you a look at perspective contortion and its consequences for rasterization.
+                        A triangle $\Delta ABC$ with $A = (0, 0, -1)^T$, $B = (0, 2, -3)^T$ and $C = (-2, -1, -3)^T$ is given.
+                        This triangle contains another triangle which consists of the centers of the edges $AB$, $BC$ and $CA$.
+                        Furthermore, a projection matrix $M$ is given which transforms $\Delta ABC$ such that $A'$ lies at the near plane and $B'$ and $C'$ lie on the far plane.
+                        $$
+                        M=\left[
+                        \begin{array}{rrrr}
+                        1 & 0 & 0 & 0 \\
+                        0 & 1 & 0 & 0 \\
+                        0 & 0 & -2 & -3 \\
+                        0 & 0 & -1 & 0
+                        \end{array}
+                        \right]
+                        $$
+                        <ol>
+                            <li>
+                                Compute the transformed and dehomogenized vertices $A'$, $B'$ and $C'$.
+                                Make use of the given helper functions (see comments in the source file).
+                            </li>
+                            <li>
+                                Compute the centers of the edges $P_{A',B'}$, $P_{B',C'}$ and $P_{C',A'}$ from $A'$, $B'$ and $C'$.
+                                Is the drawn inner triangle perspectively correct?
+                                Which interpolation method do you know that would provide the same result?
+                            </li>
+                            <li>
+                                Compute the transformed and dehomogenized centers of the edges $P_{A,B}'$, $P_{B,C}'$ and $P_{C,A}'$ from $P_{A,B}$, $P_{B,C}$ and $P_{C,A}$.
+                                Is the drawn inner triangle perspectively correct?
+                            </li>
+                        </ol>
+                    </p>
+                    <p>
+                        Give answers to the theoretical questions in <code>Basic2.txt</code>!
+                    </p>
+                    <p>
+                        <canvas id="canvasBasic2_1" width=200 height=200 data-call="Basic2_1.start" data-call-src="./BasicScripts/Basic2.js">
+                            <img class="wait">
+                        </canvas>
+                        <canvas id="canvasBasic2_2" width=200 height=200 data-call="Basic2_2.start" data-call-src="./BasicScripts/Basic2.js">
+                            <img class="wait">
+                        </canvas>
+                        <canvas id="canvasBasic2_3" width=200 height=200 data-call="Basic2_3.start" data-call-src="./BasicScripts/Basic2.js">
+                            <img class="wait">
+                        </canvas>
+
+                    </p>
+                </task>
+
+                <task title="Textures in WebGL" points=4>
+                    <p>
+                        In this task, you should texture a plane, first with a texture containing colors, second with a texture
+                        containing normals. Right now, you look at the plane (which is colored grey) from the top. You can change
+                        the viewing angle using the <code>W</code> and <code>S</code> keys. There is a point light source hovering
+                        over the plane, like in the Phong shading task of Basic Exercises 6.
+                    </p>
+                    <subtask title="Texture Mapping" points="2" submitfile="Basic3.js, shader_texture.vs, shader_texture.fs">
+                        <img class="floatRight" id="checkerboard_show" width="150" height="150" src='./resources/checkerboard.png' />
+                        <p>
+                            On the right, you see a checkerboard texture. Several steps are needed to apply this texture
+                            to the plane.
+                        </p>
+                        <p>
+                            <ol>
+                                <li>
+                                    Set up the texture from the provided image.
+                                </li>
+                                <li>
+                                    In the vertex shader you can find an attribute for the texture coordinates. Define a varying
+                                    variable to pass them to the fragment shader. Assign the attribute to the varying variable.
+                                </li>
+                                <li>
+                                    In the fragment shader, define the same varying variable to receive the texture coordinates
+                                    from the vertex shader. Define a uniform sampler holding the texture to be passed, and sample
+                                    the texture at the texture coordinates.
+                                </li>
+                                
+                            </ol>
+                        </p>
+                        <p>
+                            Once the texture is set up correctly, you see the texture in the upper left corner of the plane,
+                            where the texture coordinates are smaller than $1$. To repeat the texture for texture coordinates greater than $1$ rather than clamping 
+                            it to the nearest value, you can check the associated checkbox. Have a look at <code>onChangeRepeat()</code> 
+                            to see how it works.
+                        </p>
+                        <p>
+                            As soon as repeating is enabled, the texture covers the entire plane. When you change 
+                            the view angle, however, minification occurs in areas farther away, and ugly patterns arise.
+                            To change this, enable MIP mapping by checking the associated checkbox. Have a look at <code>onChangeMipmap()</code>
+                            to see how it works.
+                        </p>
+                    </subtask>
+                    <subtask title="Normal Mapping" points="2" submitfile="Basic3.js, shader_texture.fs">
+                        <img class="floatRight" id="cobblestone_show" width="150" height="150" src='./resources/cobblestone.png' />
+                        <p>
+                            A texture can also be used to store additional information of a surface, such as normals. On the right,
+                            you see a so-called normal map which stores normals encoded as RGB triplets. Once these normals are used
+                            for lighting computation in the fragment shader, the plane does not look flat anymore, but as if covered with
+                            cobblestone. Find the appropriate <code>TODO</code>s in the two submission files and apply the normal
+                            map to the plane! You can reuse the texture coordinates already used in the first subtask.
+                            Be aware of two things: First, the normals are stored as colors, which means that their values have
+                            been mapped to $[0,1]$. You have to bring them back to $[-1,1]$ to use the normals. Second, unlike in the last
+                            subtask, the plane should be covered with one single, unrepeated instance of the texture. Therefore, you have
+                            to change the texture coordinates to be in range $[0,1]$ rather than $[0,width]$ and $[0,height]$, respectively 
+                            ($width$ and $height$ are given in the uniform <code>planeSize</code>!). 
+                        </p>
+                    </subtask>
+                    <fieldset class="floatRight">
+                        <p>
+                            <input type="radio" name="texture" value="checkerboard" onchange="Basic3.onChangeTexture(0);" checked> checkerboard texture
+                            <span style="display:inline-block; width:100px;"></span>
+                            <input type="radio" name="texture" value="cobblestone" onchange="Basic3.onChangeTexture(1);"> cobblestone normal texture
+                        </p>
+                        <p>
+                            <span style="display:inline-block; width:30px;"></span>
+                            <input type="checkbox" id="repeat" onchange="Basic3.onChangeRepeat();"> repeat the texture
+                        </p>
+                        <p>
+                            <span style="display:inline-block; width:30px;"></span>
+                            <input type="checkbox" id="mipmap" onchange="Basic3.onChangeMipmap();"> enable MIP mapping
+                        </p>
+                    </fieldset>
+                    <img id="checkerboard" src='./resources/checkerboard.png' style="display:none" />
+                    <img id="cobblestone" src='./resources/cobblestone.png' style="display:none" />
+                    <canvas class="floatRight" id="canvasTexturing" width=600 height=600 data-call="Basic3.webGLStart" data-call-src="./BasicScripts/Basic3.js">
+                        <img class="wait">
+                        <shader id="shader-vs-phong" type="--vertex" src="./BasicScripts/shader_texture.vs"></shader>
+                        <shader id="shader-fs-phong" type="--fragment" src="./BasicScripts/shader_texture.fs"></shader>
+                        <shader id="shader-vs-light" type="--vertex" src="./BasicScripts/shader_light.vs"></shader>
+                        <shader id="shader-fs-light" type="--fragment" src="./BasicScripts/shader_light.fs"></shader>
+                    </canvas>
+                </task>
+            </exercise>
+        </content>
+    </page>
+
+</body>
