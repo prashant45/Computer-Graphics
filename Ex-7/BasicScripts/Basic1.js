@@ -44,10 +44,12 @@ function MipMap(texture1D, nLevelMax) {
 
     // copy first level
     this.texLevels[0] = new Array(texDim);
-    for (var i = 0; i < texDim; ++i) 
+    
+	for (var i = 0; i < texDim; ++i) 
 		this.texLevels[0][i] = [texture1D[i][0], texture1D[i][1], texture1D[i][2]];
 	
-
+	
+	//console.log(this.texLevels[0]);
     // TODO: compute mip map pyramid
     // use simple boxfilter to compute next mipmap level
     // assume dimension of texture to be a power of 2
@@ -59,21 +61,16 @@ function MipMap(texture1D, nLevelMax) {
 		var texDim_new = texDim/Math.pow(2,l);
 		 // 2. allocate array with the right dimension
 		this.texLevels[l] = new Array(texDim_new);
-		 
+		var k = 0;				
 		// 3. compute the color values of the pixel using a boxfilter
-		for(var j = 0; j < texDim_new; j++){
-			this.texLevels[l][j] = ( this.texLevels[l-1][j] + this.texLevels[l-1][j+1] ) / 2.0;
-
-
-
-
+		for(var j = 0; j < texDim_new; ++j){
+			
+			this.texLevels[l][j] = [ ( this.texLevels[l-1][k][0] + this.texLevels[l-1][k+1][0] ) / 2,
+									 ( this.texLevels[l-1][k][1] + this.texLevels[l-1][k+1][1] ) / 2,
+									 ( this.texLevels[l-1][k][2] + this.texLevels[l-1][k+1][2] ) / 2 ];
+									 k+=2;
 		}
-		var temp1 = ( this.texLevels[0][0] + this.texLevels[0][1] ) / 2.0;
-		var temp2 = ( this.texLevels[0][2] + this.texLevels[0][3] ) / 2.0;
-		this.texLevels[l][0] = temp1;
-		this.texLevels[l][1] = temp2;
-		
-		}
+	}
 }
 
 MipMap.prototype.sampleNearestNeighbor = function (texCoord, level) {
@@ -343,7 +340,7 @@ var Basic1 = function () {
 
             // TODO: determin level, based on the footprint of the pixel
             // 1. use pixelBottom_proj[2] and pixelTop_proj[2] to determin the footprint of the pixel on the texture
-            
+            var footprint = Math.sqrt(pixelBottom_proj[2]*pixelBottom_proj[2] + pixelTop_proj[2]*pixelTop_proj[2]);
             // 2. determin the mip map level where the texel size is larger than the pixel footprint
             
 
