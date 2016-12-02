@@ -51,17 +51,34 @@ function MipMap(texture1D, nLevelMax) {
     // TODO: compute mip map pyramid
     // use simple boxfilter to compute next mipmap level
     // assume dimension of texture to be a power of 2
-    for (var l = 1; l < this.nLevel; ++l) {
-        // 1. compute texture dimension of that level
-		var texDim_new = Math.sqrt(texDim);
-				
-        // 2. allocate array with the right dimension
-		this.texLevels[l] = new Array(texDim_new);
-		for (var i = 0; i < texDim_new; ++i) 
-			this.texLevels[l][i] = [texture1D[i][0], texture1D[i][1], texture1D[i][2]];
-        
-        // 3. compute the color values of the pixel using a boxfilter
-    }
+    
+    
+    /*for (var l = 1; l < this.nLevel; ++l) {
+    
+    // 1. compute texture dimension of that level
+	var texDim_new = texDim/Math.pow(2,l);		
+	
+     // 2. allocate array with the right dimension
+	this.texLevels[l] = new Array(texDim_new);
+	 
+    // 3. compute the color values of the pixel using a boxfilter
+    for (var i = 0; i < texDim_new; ++i){
+		
+	}
+		this.texLevels[l][i] = [];
+    }*/
+    
+    var texDim_new1 = texDim/Math.pow(2,l);	
+    this.texLevels[1] = new Array(texDim_new1);
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 MipMap.prototype.sampleNearestNeighbor = function (texCoord, level) {
@@ -120,15 +137,16 @@ var Basic0 = function () {
 		var idx_left_up = (texDimU * left_up[1] + left_up[0]);
 		var idx_right_up = (texDimU * right_up[1] + right_up[0]);
 		
-		var al = Math.ceil(u) - u;
+		//var al = Math.ceil(u) - u;
+		var alpha_u = u - Math.floor(u);
+		var alpha_v = v - Math.floor(v);
 		
         // 3. interpolate linearly in u (use interpolateColor())
-		var color_u = interpolateColor(texture[idx_left_down], texture[idx_right_down], al);
+		var color_interpolate1 = interpolateColor(texture[idx_left_down], texture[idx_right_down], alpha_u);
+		var color_interpolate2 = interpolateColor(texture[idx_left_up], texture[idx_right_up], alpha_u);
 		
 		// 4. interpolate linearly in v (use interpolateColor())
-		var color_v = interpolateColor(texture[idx_left_up], texture[idx_right_up], al);
-		
-		var color_final = interpolateColor(color_u, color_v, al);
+		var color_final = interpolateColor(color_interpolate1, color_interpolate2, alpha_v);
         
 		// replace this line
         return color_final;
