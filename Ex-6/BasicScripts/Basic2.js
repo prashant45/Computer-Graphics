@@ -401,8 +401,7 @@ var Basic2_3 = function () {
 			grd.addColorStop(0,'rgb(' + a[0] + ',' + a[1] + ',' + a[2] + ')');
 			grd.addColorStop(1,'rgb(' + b[0] + ',' + b[1] + ',' + b[2] + ')');	
 			context.strokeStyle=grd;
-			
-			//setStrokeStyle(context, color);
+		
 
             // draw line segment
             context.beginPath();
