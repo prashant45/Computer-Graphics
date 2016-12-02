@@ -71,8 +71,8 @@ void main(void)
 	//				using the inverse camera matrix given as a 
 	//				uniform.
 	
-	vec3 camera_pos = vec3(cameraMatrixInverse * vec4(worldPos, 0.0));
-	vec3 v = -normalize(camera_pos - worldPos);
+	vec3 camera_pos = vec3(cameraMatrixInverse * vec4(0.0, 0.0, 0.0, 1.0));
+	vec3 v = normalize(camera_pos - worldPos);
 	
 	color_specular = k_spec * pow(dot(v, r), shiny);
 
