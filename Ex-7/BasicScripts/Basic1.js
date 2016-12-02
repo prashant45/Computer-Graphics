@@ -106,7 +106,7 @@ var Basic0 = function () {
 	
         // TODO: Implement bilinear interpolation of the texture stored in the global variable "texture"
         // 1. determin the uv coordinates of the 4 surrounding pixels (use Math.floor / Math.ceil)
-
+		
 		var left = [ Math.floor(u), v];
 		var topp = [ u, Math.floor(v)];
 		var right = [ Math.ceil(u), v];
