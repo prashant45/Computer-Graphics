@@ -39,21 +39,27 @@ function MipMap(texture1D, nLevelMax) {
     var texDim = texture1D.length;
     this.nLevel = Math.max(Math.min(Math.log2(texDim)+1, nLevelMax), 1);
     this.texLevels = new Array(this.nLevel);
+	
 
     // copy first level
     this.texLevels[0] = new Array(texDim);
-    for (var i = 0; i < texDim; ++i) this.texLevels[0][i] = [texture1D[i][0], texture1D[i][1], texture1D[i][2]];
+    for (var i = 0; i < texDim; ++i) 
+		this.texLevels[0][i] = [texture1D[i][0], texture1D[i][1], texture1D[i][2]];
+	
 
     // TODO: compute mip map pyramid
     // use simple boxfilter to compute next mipmap level
     // assume dimension of texture to be a power of 2
     for (var l = 1; l < this.nLevel; ++l) {
         // 1. compute texture dimension of that level
-        
+		texDim = Math.pow(texture1D.length, 2.0);
+		
+		
         // 2. allocate array with the right dimension
+		//this.texLevels[l] = new Array(texDim);
+		
         
-        // 3. compute the color values of the pixel using a boxfilter
-        
+        // 3. compute the color values of the pixel using a boxfilter*/
     }
 }
 
@@ -71,13 +77,14 @@ var Basic0 = function () {
     var texture = [ [1.0, 0.0, 0.0], [0.5, 0.5, 0.5], [1.0, 0.0, 1.0],
                     [1.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 0.0],
                     [0.0, 0.0, 1.0], [0.0, 0.0, 0.0], [1.0, 1.0, 0.5]];
-    var texDimU = 3;
-    var texDimV = 3;
+    var texDimU = 3.0;
+    var texDimV = 3.0;
 
     function sampleNearestNeighbor(texCoord) {
         // this implements texture clamp mode -> texCoord is in the range of [0,1]
         texCoord[0] = Math.max(Math.min(texCoord[0], 1.0), 0.0);
         texCoord[1] = Math.max(Math.min(texCoord[1], 1.0), 0.0);
+
         // compute nearest neighbor
         var u = Math.round(texCoord[0] * (texDimU - 1));
         var v = Math.round(texCoord[1] * (texDimV - 1));
@@ -95,31 +102,33 @@ var Basic0 = function () {
         // texture clamp
         var u = Math.max(Math.min(texCoord[0], 1.0), 0.0) * (texDimU - 1); 
         var v = Math.max(Math.min(texCoord[1], 1.0), 0.0) * (texDimV - 1);
-
-
+		
+	
         // TODO: Implement bilinear interpolation of the texture stored in the global variable "texture"
         // 1. determin the uv coordinates of the 4 surrounding pixels (use Math.floor / Math.ceil)
-	
-	var u1 = Math.floor(u-1.0);
-	var v1 = Math.floor(v);
 
-	var u2 = Math.floor(u);
-	var v2 = Math.floor(v-1.0);
-	
-	var u3 = Math.floor(u+1.0);
-	var v3 = Math.floor(v);
-
-	var u4 = Math.floor(u);
-	var v4 = Math.floor(v+1.0);
+		var left = [ Math.floor(u), v];
+		var topp = [ u, Math.floor(v)];
+		var right = [ Math.ceil(u), v];
+		var bottom = [ u, Math.ceil(v)];
         
         // 2. compute the linear indices of the surrounding pixels (e.g. idx = texDimU * v + u;)
-
+		
+		var idx_left = 	 Math.round(texDimU * left[1] + left[0]);
+		var idx_top = 	 Math.round(texDimV * topp[1] + topp[0]);
+		var idx_right =   Math.round(texDimU * right[1] + right[0]);
+		var idx_bottom =  Math.round(texDimV * bottom[1] + bottom[0]);
+		
         // 3. interpolate linearly in u (use interpolateColor())
-
+		var color_u = interpolateColor(texture[idx_left], texture[idx_right], v);
+		
         // 4. interpolate linearly in v (use interpolateColor())
-
-        // replace this line
-        return [0.7, 0.7, 0.7];
+		var color_v = interpolateColor(texture[idx_top], texture[idx_bottom], u);
+		var color_final = vec3.create();
+		color_final = color_u + color_v;
+        
+		// replace this line
+        return color_final;
     }
 
     function Render() {

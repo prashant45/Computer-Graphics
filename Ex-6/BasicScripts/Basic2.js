@@ -396,8 +396,8 @@ var Basic2_3 = function () {
 			
 			var grd = context.createLinearGradient(vertices[i][0], vertices[i][1], vertices[i+1][0], vertices[i+1][1]);
 			
-			a = floatToColor(color_vertexone);
-			b = floatToColor(color_vertextwo);
+			var a = floatToColor(color_vertexone);
+			var b = floatToColor(color_vertextwo);
 			grd.addColorStop(0,'rgb(' + a[0] + ',' + a[1] + ',' + a[2] + ')');
 			grd.addColorStop(1,'rgb(' + b[0] + ',' + b[1] + ',' + b[2] + ')');	
 			context.strokeStyle=grd;
