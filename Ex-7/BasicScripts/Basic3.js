@@ -310,7 +310,7 @@ var Basic3 = function () {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.bindTexture(gl.TEXTURE_2D, null);
+        // gl.bindTexture(gl.TEXTURE_2D, null);
 
         // TODO 7.3a):  Set up the texture containing the checkerboard
         //              image. Have a look at the functions gl.bindTexture(),
@@ -322,7 +322,9 @@ var Basic3 = function () {
         //              Note: You can ignore error messages regarding 
         //              slow conversion or expensive reformat.
 
-        
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+		gl.generateMipmap(gl.TEXTURE_2D);
+		gl.bindTexture(gl.TEXTURE_2D, null);
 
         var image = document.getElementById('cobblestone');
         textureCobblestone = gl.createTexture();
@@ -334,8 +336,13 @@ var Basic3 = function () {
         //              to gl.LINEAR. Format, internal format and type should
         //              be the same as for the checkerboard texture.
 
+		gl.bindTexture(gl.TEXTURE_2D, textureCobblestone);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+		gl.bindTexture(gl.TEXTURE_2D, null);
 
-        
 
     }
 
