@@ -37,6 +37,7 @@ function setFillStyle(context, rgb_float) {
 
 function MipMap(texture1D, nLevelMax) {
     var texDim = texture1D.length;
+	
     this.nLevel = Math.max(Math.min(Math.log2(texDim)+1, nLevelMax), 1);
     this.texLevels = new Array(this.nLevel);
 	
@@ -52,14 +53,14 @@ function MipMap(texture1D, nLevelMax) {
     // assume dimension of texture to be a power of 2
     for (var l = 1; l < this.nLevel; ++l) {
         // 1. compute texture dimension of that level
-		texDim = Math.pow(texture1D.length, 2.0);
-		
-		
+		var texDim_new = Math.sqrt(texDim);
+				
         // 2. allocate array with the right dimension
-		//this.texLevels[l] = new Array(texDim);
-		
+		this.texLevels[l] = new Array(texDim_new);
+		for (var i = 0; i < texDim_new; ++i) 
+			this.texLevels[l][i] = [texture1D[i][0], texture1D[i][1], texture1D[i][2]];
         
-        // 3. compute the color values of the pixel using a boxfilter*/
+        // 3. compute the color values of the pixel using a boxfilter
     }
 }
 
@@ -107,25 +108,27 @@ var Basic0 = function () {
         // TODO: Implement bilinear interpolation of the texture stored in the global variable "texture"
         // 1. determin the uv coordinates of the 4 surrounding pixels (use Math.floor / Math.ceil)
 		
-		var left = [ Math.floor(u), v];
-		var topp = [ u, Math.floor(v)];
-		var right = [ Math.ceil(u), v];
-		var bottom = [ u, Math.ceil(v)];
+		var left_down = [ Math.floor(u), Math.floor(v)];
+		var right_down = [ Math.ceil(u), Math.floor(v)];
+		var left_up = [ Math.floor(u), Math.ceil(v)];
+		var right_up = [ Math.ceil(u), Math.ceil(v)];
         
         // 2. compute the linear indices of the surrounding pixels (e.g. idx = texDimU * v + u;)
 		
-		var idx_left = 	 Math.round(texDimU * left[1] + left[0]);
-		var idx_top = 	 Math.round(texDimV * topp[1] + topp[0]);
-		var idx_right =   Math.round(texDimU * right[1] + right[0]);
-		var idx_bottom =  Math.round(texDimV * bottom[1] + bottom[0]);
+		var idx_left_down = (texDimU * left_down[1] + left_down[0]);
+		var idx_right_down = (texDimU * right_down[1] + right_down[0]);
+		var idx_left_up = (texDimU * left_up[1] + left_up[0]);
+		var idx_right_up = (texDimU * right_up[1] + right_up[0]);
+		
+		var al = Math.ceil(u) - u;
 		
         // 3. interpolate linearly in u (use interpolateColor())
-		var color_u = interpolateColor(texture[idx_left], texture[idx_right], v);
+		var color_u = interpolateColor(texture[idx_left_down], texture[idx_right_down], al);
 		
-        // 4. interpolate linearly in v (use interpolateColor())
-		var color_v = interpolateColor(texture[idx_top], texture[idx_bottom], u);
-		var color_final = vec3.create();
-		color_final = color_u + color_v;
+		// 4. interpolate linearly in v (use interpolateColor())
+		var color_v = interpolateColor(texture[idx_left_up], texture[idx_right_up], al);
+		
+		var color_final = interpolateColor(color_u, color_v, al);
         
 		// replace this line
         return color_final;
