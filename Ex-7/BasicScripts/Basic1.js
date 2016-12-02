@@ -53,32 +53,27 @@ function MipMap(texture1D, nLevelMax) {
     // assume dimension of texture to be a power of 2
     
     
-    /*for (var l = 1; l < this.nLevel; ++l) {
+    for (var l = 1; l < this.nLevel; ++l) {
     
-    // 1. compute texture dimension of that level
-	var texDim_new = texDim/Math.pow(2,l);		
-	
-     // 2. allocate array with the right dimension
-	this.texLevels[l] = new Array(texDim_new);
-	 
-    // 3. compute the color values of the pixel using a boxfilter
-    for (var i = 0; i < texDim_new; ++i){
+		// 1. compute texture dimension of that level
+		var texDim_new = texDim/Math.pow(2,l);
+		 // 2. allocate array with the right dimension
+		this.texLevels[l] = new Array(texDim_new);
+		 
+		// 3. compute the color values of the pixel using a boxfilter
+		for(var j = 0; j < texDim_new; j++){
+			this.texLevels[l][j] = ( this.texLevels[l-1][j] + this.texLevels[l-1][j+1] ) / 2.0;
+
+
+
+
+		}
+		var temp1 = ( this.texLevels[0][0] + this.texLevels[0][1] ) / 2.0;
+		var temp2 = ( this.texLevels[0][2] + this.texLevels[0][3] ) / 2.0;
+		this.texLevels[l][0] = temp1;
+		this.texLevels[l][1] = temp2;
 		
-	}
-		this.texLevels[l][i] = [];
-    }*/
-    
-    var texDim_new1 = texDim/Math.pow(2,l);	
-    this.texLevels[1] = new Array(texDim_new1);
-    
-    
-    
-    
-    
-    
-    
-    
-    
+		}
 }
 
 MipMap.prototype.sampleNearestNeighbor = function (texCoord, level) {
