@@ -1,0 +1,4 @@
+Task 7.2 )
+Qb - 	In this case, the inner triangle computed by the midpoints of dehomogenized vertices is not perspectively correct.
+	Also the same results can be obtained by linear interpolation.
+Qc - 	In this case, the inner triangle computed by homogeneous coordinates is perspectively correct.

@@ -1,4 +1,4 @@
-function arrow(context, fromx, fromy, tox, toy, text) {
+	function arrow(context, fromx, fromy, tox, toy, text) {
     if (fromx == tox && fromy == toy) return;
 
     // http://stuff.titus-c.ch/arrow.html
