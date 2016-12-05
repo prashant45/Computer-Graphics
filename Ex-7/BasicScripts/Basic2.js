@@ -107,7 +107,6 @@ var Basic2_1 = function () {
 			var vertex_B = dehomogenize( matrixVectorProduct(M, [ triangle[1][0], triangle[1][1], triangle[1][2], 1.0]) );
 			var vertex_C = dehomogenize( matrixVectorProduct(M, [ triangle[2][0], triangle[2][1], triangle[2][2], 1.0]) );
 			
-			//console.log([triangle[0], 1.0]);
             // 2. draw triangle (use drawTriangle())
             drawTriangle(context, canvasWidth, canvasHeight, [vertex_A, vertex_B, vertex_C], ["A", "B", "C"]);
 
@@ -152,7 +151,7 @@ var Basic2_2 = function () {
 			var mid_AC = midPoint(vertex_A, vertex_C);
 
             // 3. draw triangles (leave last argument undefined for inner triangle)
-			drawTriangle(context, canvasWidth, canvasHeight, [mid_AB, mid_BC, mid_AC], ["Cab", "Cbc", "Cac"]);
+			drawTriangle(context, canvasWidth, canvasHeight, [mid_AB, mid_BC, mid_AC], ["A.C", "B.C", "A.C"]);
 			
             // draw axis
             arrow(context, 15, 285, 15, 255);
