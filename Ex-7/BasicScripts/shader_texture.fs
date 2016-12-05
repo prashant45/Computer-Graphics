@@ -24,7 +24,7 @@ varying vec3 position;
 //				representing the texture
 //				coordinates.
 
-varying vec2 text_coord;
+varying vec2 tex_coord;
 
 void main(void) {
 	
@@ -43,14 +43,17 @@ void main(void) {
 		//				the texture coordinates have to be
 		//				scaled accordingly. Replace the following
 		//				dummy line.
-		n = normalize((texture2D(cobblestoneTexture, vec2(text_coord[0]/planeSize[0],text_coord[1]/planeSize[1]))).rgb * 2.0 - 1.0);
+		vec2 temp;
+		temp.x = tex_coord[0]/planeSize[0];
+		temp.y = tex_coord[1]/planeSize[1];
+		n = normalize((texture2D(cobblestoneTexture, vec2(temp[0], temp[1])).rgb * 2.0 - 1.0));
 	} else {
 		n = normal;
 		// TODO 7.3a):	Read the RGB value from the texture
 		//				using the function texture2D() and
 		//				the texture coordinates. Replace the
 		//				following dummy line.
-		color = (texture2D(checkerboardTexture, text_coord)).rgb;
+		color = (texture2D(checkerboardTexture, tex_coord)).rgb;
 	}
 	
 	vec3 k_amb = 0.1 * color;
