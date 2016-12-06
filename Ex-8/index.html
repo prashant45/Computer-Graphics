@@ -1,0 +1,255 @@
+﻿
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./resources/css/print.css">
+
+    <meta name="lecture" content="Computer Graphics">
+    <meta name="exerciseNr" content="8">
+    <meta name="exercisePrefix" content="Exercise">
+    <meta name="term" content="Winter Term 2016/17">
+    <meta name="dueDate" content="December 12, 2016, 11:59 pm">
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script type="text/javascript" src="./resources/js/sheet.js"></script>
+
+    <script type="text/javascript" src="./BasicScripts/gl-matrix.js"></script>
+
+    <style>
+        #div0, #div1, #div2, #div3 {
+            float: left;
+            width: 150px;
+            height: 100px;
+            margin: 5px;
+        }
+    </style>
+    <script type="text/javascript" src="./BasicScripts/drag_drop.js"></script>
+    <script type="text/javascript" src="./BasicScripts/RenderingPipeline.js"></script>
+</head>
+
+
+<body>
+
+    <page size="A4">
+        <content>
+
+            <exercise prefix="Basic Exercises" title="Visibility, Depth Buffer & Transparency" points=10>
+                
+                <task title="Back Face Culling" points=2 submitfile="Basic1.js">
+                    <p>
+                        From the lecture you know the method of back face culling, i. e. preventing back-facing triangles from being drawn in order to reduce rendering load.
+                        In this task, you should implement this method in 2D in two different ways, culling away the back side of the circle you see in the canvas below.
+                    </p>
+                    <p>
+                        The circle is shown in clip space, which means that the view direction can be assumed to be aligned with the $z$ axis. Find two different ways
+                        of culling away line segments facing away from the viewer, one based on the segment normal and one based on the coordinates of the line segment
+                        endpoints.
+                    </p>
+                        
+                    <p>
+                        <canvas id="canvasBasic1" class="floatLeft" width=380 height=350 data-call="Basic1.start" data-call-src="./BasicScripts/Basic1.js">
+                            <img class="wait">
+                        </canvas>
+                    </p>
+                    <fieldset>
+                        <p>
+                            number of segments:
+                        </p>
+                        <input type="range" id="nSegments" value="10" min="4" max="50" onchange="Basic1.onChangeNSegments(this.value);" />
+                    </fieldset>
+                    <fieldset>
+                        <p>
+                            <input type="radio" name="culling" onchange="Basic1.onChangeCulling(0);" checked> no culling
+                        </p>
+                        <p>
+                            <input type="radio" name="culling" onchange="Basic1.onChangeCulling(1);"> culling (normals)
+                        </p>
+                        <p>
+                            <input type="radio" name="culling" onchange="Basic1.onChangeCulling(2);"> culling (simplified)
+                        </p>
+                    </fieldset>
+
+                    <subtask title="Back Face Culling using Segment Normals" points="1">
+                        <p>
+                            The computation of normals for each line segment is already given. Find the function <code>cullSegmentNormal()</code> in <code>Basic1.js</code>. 
+                            This method is given the normal of the line segment which should be tested for orientation towards or away from the viewer. 
+                            Implement a culling test with respect to this segment normal.
+                        </p>
+                    </subtask>
+
+                    <subtask title="Back Face Culling using Segment Coordinates" points="1">
+                        <p>
+                            Now think of the way back face culling is performed in 3D: There is no need to compute the normal for each triangle
+                            as there is a convention which tells you that the normal - by construction - always goes out in the direction from where
+                            the vertices forming the triangle can be seen in counterclockwise order. Therefore, the culling decision can be made only
+                            considering the order of the vertices.
+                        </p>
+                        <p>
+                            Your task is to find the 2D analogy to this method: As normals, in our example, have been constructed facing to the left
+                            in relation to the direction from starting point to end point, there is an easy way to decide whether to cull or not 
+                            without the need to compute the line segment normal. Find the function <code>cullSegmentSimplified()</code>, 
+                            which is only given the line segment and not the normal, and implement a simpler culling test. 
+                        </p>
+                        <p>
+                            You can adjust the number of line segments the circle consists of using the slider. The two culling algorithms
+                            should look the same for all numbers of segments.
+                        </p>
+                    </subtask>
+                </task>
+
+                <task title="Alpha Blending" points=3 submitfile="Basic2.js">
+
+                    <p>
+                        In this task, you should implement correct alpha blending of the four colored circles you see below. The composed image should have a
+                        background of pure white, and the circles should be blended onto it from left to right (initial order: blue - red - yellow - green).
+                        You can alter the order of the circles and therefore of the blending process using drag-and-drop. The alpha values
+                        (ranging from $0$ to $1$, preset to $0.5$) can be modified using the sliders below the circle images.
+                    </p>
+                    <p>
+                        Follow the instructions in the <code>TODO</code>s to implement the function <code>doAlphaBlending()</code> and fill the canvas below
+                        the images with a blended version of the four circles.  Note that, for every image, only the circle
+                        and not its background should be blended, which is why it is transparent.
+                        Transparency of background pixels is annotated with a zero alpha channel value which you will have to use in your implementation.
+                    </p>
+
+                    <div id="div0" ondrop="Basic2.drop(event)" ondragover="Basic2.allowDrop(event)">
+                        <img src="./resources/images/blue.png" width=150 height=100 draggable="true" ondragstart="Basic2.drag(event)" id="drag0">
+                    </div>
+
+                    <div id="div1" ondrop="Basic2.drop(event)" ondragover="Basic2.allowDrop(event)">
+                        <img src="./resources/images/red.png" width=150 height=100 draggable="true" ondragstart="Basic2.drag(event)" id="drag1">
+                    </div>
+
+                    <div id="div2" ondrop="Basic2.drop(event)" ondragover="Basic2.allowDrop(event)">
+                        <img src="./resources/images/yellow.png" width=150 height=100 draggable="true" ondragstart="Basic2.drag(event)" id="drag2">
+                    </div>
+
+                    <div id="div3" ondrop="Basic2.drop(event)" ondragover="Basic2.allowDrop(event)">
+                        <img src="./resources/images/green.png" width=150 height=100 draggable="true" ondragstart="Basic2.drag(event)" id="drag3">
+                    </div>
+                    <table>
+                        <tr>
+                            <td> $\alpha$: <input type="range" id="alpha0" name="alpha" value="0.5" min="0" max="1" step="0.1" onchange="Basic2.onChangeAlpha(0, this.value);" style="width: 100px;" /></td>
+                            <td> $\alpha$: <input type="range" id="alpha1" name="alpha" value="0.5" min="0" max="1" step="0.1" onchange="Basic2.onChangeAlpha(1, this.value);" style="width: 100px;" /> </td>
+                            <td> $\alpha$: <input type="range" id="alpha2" name="alpha" value="0.5" min="0" max="1" step="0.1" onchange="Basic2.onChangeAlpha(2, this.value);" style="width: 100px;" /> </td>
+                            <td> $\alpha$: <input type="range" id="alpha3" name="alpha" value="0.5" min="0" max="1" step="0.1" onchange="Basic2.onChangeAlpha(3, this.value);" style="width: 100px;" /> </td>
+                        </tr>
+                    </table>
+                    <p>
+                        <center>
+                            <canvas id="canvasBasic2" width=300 height=200 data-call="Basic2.start" data-call-src="./BasicScripts/Basic2.js">
+                                <img class="wait">
+                            </canvas>
+                        </center>
+                    </p>
+                    <p>
+                        Once you are done, you can play around with the alpha values and the blending order to observe different effects. Note that you can
+                        also completely hide a circle by setting its alpha value to $0$.
+                    </p>
+
+                </task>
+
+                <task title="Rendering Pipeline Summary" points=5 submitfile="RenderingPipeline.js, zFighting.txt">
+                    <p>
+                        In this task we have a look at a simplified 2D rendering pipeline.
+                        The rendering pipeline is called in <code>RenderingPipeline.prototype.Render</code>.
+                        <ul>
+                            <li>
+                                The vertices of the geometry are handed to the <code>Vertex Shader Stage</code>. In this stage the vertex shader is called for every vertex.
+                                The result is stored in a vertex stream.
+                            </li>
+                            <li>
+                                In the <code>Primitive Assembly Stage</code> the primitives are assembled using the result of the <code>Vertex Shader Stage</code> and the <code>IBO</code> (Index Buffer Object).
+                                You have to <b>implement the assembly stage</b> (<code>RenderingPipeline.prototype.PrimitiveAssemblyStage</code>)! Follow the comments in the source code.
+                            </li>
+                            <li>
+                                Knowing the primitives, the pipeline gives the possibility to cull unnecessary ones (e.g. if a primitive does not point into the direction of the camera).
+                                This is done in the <code>Face Culling Stage</code>. You have to <b>implement the primitive culling</b> in <code>RenderingPipeline.prototype.LineCulling</code>!
+                            </li>
+                            <li>
+                                All primitives that pass the culling test are given to the <code>Clipping Stage</code>.
+                                The <code>Clipping Stage</code> implements <code>Alpha Clipping in Homogeneous Coordinates</code> and clips each primitive against the view volume.
+                            </li>
+                            <li>
+                                Based on the result of the clipping stage the primitives are drawn using <code>Rasterization</code>.
+                                The rasterizer dehomogenizes the projected vertex positions, applies the viewport transformation, maps depth to $[0,1]$, interpolates attributes and emits fragments that are covered by the primitive.
+                            </li>
+                            <li>
+                                The fragments are passed to the <code>Fragment Shader Stage</code>, where the <code>Fragment Shader</code> is called for every fragment.
+                            </li>
+                            <li>
+                                The result of the <code>Fragment Shader</code> (especially the depth) are passed to the <code>Per Sample Processing Stage</code>.
+                                This stage writes the results in the corresponding render target buffers based on the depth of a fragment and the depth test mode.
+                                Your task is to <b>implement the depth test</b> in <code>DepthBuffer.prototype.TestAndSetFragment</code>.
+                                This method compares the old value with the fragment depth value, sets the new depth value if it passes the test and returns the result of the test. Follow the comments in the source code.
+                                Note that the depth buffer stores and compares depth values with a low precision fix point representation.
+                                You can adjust the precision using the sliders below.
+                            </li>
+                        </ul>
+                        <br />
+                    <p>
+                        Implement the bold written parts of the pipeline above.
+                        Play a little bit with the sliders that control the near and far plane and the precison of the depth buffer. When does <b>z-Fighting</b> occur?
+                        Write your answer in the text file <code>zFighting.txt</code>.
+                        <br /><br />
+                        You can use the mouse button to place the camera position. The look-at point can be set by holding [ctrl] and pressing the mouse button.
+                        <br />
+                    </p>
+                    </p>
+
+                    <canvas class="floatLeft" id="canvasBasic3" width=600 height=500 data-call="Basic3.start" data-call-src="./BasicScripts/Basic3.js">
+                        <img class="wait">
+                    </canvas>
+
+                    <fieldset>
+                        <p>
+                            Near: <input type="range" id="slider_near" min="1" max="200" step="1" value="150" onchange="Basic3.onChangeNearSlider(this.value);" />
+                        </p>
+                        <p>
+                            Far: <input type="range" id="slider_far" min="200" max="800" step="1" value="500" onchange="Basic3.onChangeFarSlider(this.value);" />
+                        </p>
+                        <p>
+                            Depth Bit Quantization: <input type="range" id="slider_depth" min="2" max="24" step="1" value="10" onchange="Basic3.onChangeDepthBitSlider(this.value);" />
+                        </p>
+                        <p>
+                            Culling Mode:
+                            <span style="display:inline-block; width:20px;"></span>
+                            <input type="radio" name="cull_mode" value="no_culling" onchange="Basic3.onChangeCullingMode(0);" checked> none
+                            <span style="display:inline-block; width:20px;"></span>
+                            <input type="radio" name="cull_mode" value="backface_culling" onchange="Basic3.onChangeCullingMode(1);"> backface culling
+                            <span style="display:inline-block; width:20px;"></span>
+                            <input type="radio" name="cull_mode" value="frontface_culling" onchange="Basic3.onChangeCullingMode(-1);"> frontface culling
+                        </p>
+
+                        <p>
+                            Depth Test:
+                            <span style="display:inline-block; width:32px;"></span>
+                            <input type="radio" name="depth_mode" value="no_depth_test" onchange="Basic3.onChangeDepthMode(0);"> none
+                            <span style="display:inline-block; width:20px;"></span>
+                            <input type="radio" name="depth_mode" value="depth_less" onchange="Basic3.onChangeDepthMode(1);" checked> pass less
+                            <span style="display:inline-block; width:20px;"></span>
+                            <input type="radio" name="depth_mode" value="depth_greater" onchange="Basic3.onChangeDepthMode(-1);"> pass greater
+                        </p>
+
+                        <p>
+                            Enable Render Pipeline Logging:
+                            <span style="display:inline-block; width:30px;"></span>
+                            <input type="checkbox" id="verbose" onchange="Basic3.onChangeVerbose();">
+                        </p>
+                    </fieldset>
+                </task>
+
+            </exercise>
+        </content>
+    </page>
+
+</body>
