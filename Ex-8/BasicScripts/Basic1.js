@@ -83,8 +83,14 @@ var Basic1 = function () {
         //              to make sure that segments with normals perpendicular
         //              to the viewing direction are also culled
         //              despite floating point imprecision.
-
-        return false;
+		
+		var view_dir = new Vector(0.0, 1.0);
+		var dot_prod = view_dir.x*normal.x + view_dir.z*normal.z;
+		// *************	If the dot product is positive then the vector is away, if negative then is is towards	*************
+		if(dot_prod >= epsilon)
+			return true;
+		else
+			return false;
     }
 
     function cullSegmentSimplified(lineSegment) {
@@ -99,7 +105,11 @@ var Basic1 = function () {
         //              to the viewing direction are also culled
         //              despite floating point imprecision.
 
-        return false;
+		var product = lineSegment.startPoint.x * lineSegment.endPoint.z - lineSegment.startPoint.z * lineSegment.endPoint.x;
+		if(product < 0)
+			return true;
+		else
+			return false;
     }
 
     function drawCircle(lineSegments, normals) {
@@ -149,7 +159,6 @@ var Basic1 = function () {
         var circleSegments = computeCircle(new Vector(canvas.height / 2, 250), 100, nSegments);
         // compute the normals of the circle segments
         var normals = computeNormals(circleSegments);
-
         // draw the circle and the normals
         drawCircle(circleSegments, normals);
     }
