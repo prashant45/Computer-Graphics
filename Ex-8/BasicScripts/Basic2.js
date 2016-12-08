@@ -26,9 +26,16 @@ var Basic2 = function () {
 
         // 1. Set up a color as a return value, and initialize it with the 
         //    desired background color.
+		var color = vec3.create();
+		color = [255, 255, 255];
 
         // 2. Loop over the four circle images in the correct order to blend
         //    them one after another.
+		for (var i = 0; i < images.length; ++i)
+		{
+			
+		}
+		console.log(images[3][index]);
 
         // 3. Compute the resulting alpha value for the current pixel.
         //    If it is a background pixel of the current image (denoted
@@ -40,7 +47,7 @@ var Basic2 = function () {
         //    three color channels.
 
         // 5. Return the resulting color. Replace the following dummy line.
-        return [255, 255, 255];
+        return color;
     }
 
     function Render() {
