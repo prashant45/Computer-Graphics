@@ -28,14 +28,24 @@ var Basic2 = function () {
         //    desired background color.
 		var color = vec3.create();
 		color = [255, 255, 255];
-
+		
         // 2. Loop over the four circle images in the correct order to blend
         //    them one after another.
 		for (var i = 0; i < images.length; ++i)
 		{
+			var current_alpha = images[i][index+3];
 			
+			if(current_alpha!=0)
+			{
+				// ********** Ex : Red Channel value **********
+				//outputRed = (foregroundRed * foregroundAlpha) + (backgroundRed * (1.0 - foregroundAlpha))
+				
+				color[0] = images[i][index] * alphas[i] + color[0] * (1 - alphas[i]);
+				color[1] = images[i][index+1] * alphas[i] + color[1] * (1 - alphas[i]);
+				color[2] = images[i][index+2] * alphas[i] + color[2] * (1 - alphas[i]);	
+			}
 		}
-		console.log(images[3][index]);
+		
 
         // 3. Compute the resulting alpha value for the current pixel.
         //    If it is a background pixel of the current image (denoted

@@ -84,11 +84,10 @@ var Basic1 = function () {
         //              to the viewing direction are also culled
         //              despite floating point imprecision.
 		
-		var view_dir = new Vector(0.0, 1.0);
-		var dot_prod = view_dir.x*normal.x + view_dir.z*normal.z;
+		var dot_prod = vec2.dot([0.0, 1.0], [normal.x, normal.z]);
 		
 		// *************	If the dot product is positive then the vector is away, if negative then is is towards	*************
-		if(dot_prod >= epsilon)
+		if(dot_prod > -epsilon)
 			return true;
 		else
 			return false;
@@ -106,15 +105,17 @@ var Basic1 = function () {
         //              to the viewing direction are also culled
         //              despite floating point imprecision.
 
-		var a = b = c = p = q = o = vec3.create(); 
+		/*var a = b = c = p = q = o = vec3.create(); 
 		b = [lineSegment.startPoint.x, lineSegment.startPoint.z, 0.0];
 		a = [lineSegment.endPoint.x, lineSegment.endPoint.z, 0.0];
 		a = [0.0, 1.0, 0.0];
-		p = vec3.subtract(p, a, b);
+		vec3.subtract(p, a, b);
 		vec3.subtract(q, c, a);
 		vec3.cross(o, p, q);
-		console.log(p);
-		if(o > 0)
+		console.log(p);*/
+		
+		var produ = lineSegment.endPoint.x - lineSegment.startPoint.x;
+		if(produ > -epsilon)
 			return true;
 		else		
 			return false;
