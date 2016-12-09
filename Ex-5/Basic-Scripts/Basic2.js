@@ -25,12 +25,12 @@ mat4.perspective = function (out, fovy, near, far) {
 	out[3] = 0;
 	
 	out[4] = 0;
-	out[5] = 2*near/(t-b);
+	out[5] = 2*near/(b-t);
 	out[6] = 0;
 	out[7] = 0;
-	
+		
 	out[8] = (l+r)/(r-l);
-	out[9] = (b+t)/(t-b);
+	out[9] = (b+t)/(b-t);
     out[10] = -(far+near)/(far-near);
     out[11] = -1.0;
 
@@ -162,6 +162,7 @@ Camera3D.prototype.update = function () {
 	
 
     // this.cameraMatrix = ?
+	this.cameraMatrix = mat4.create();
 	this.cameraMatrix[0] = this.u[0];
 	this.cameraMatrix[1] = this.v[0];
 	this.cameraMatrix[2] = this.w[0];
