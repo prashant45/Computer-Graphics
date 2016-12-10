@@ -170,13 +170,15 @@ RenderingPipeline.prototype.PrimitiveAssemblyStage = function (vertexStream, ibo
     // a primitive consists of two vertices (e.g. primitives[i] = [vertexStream[idx_a], vertexStream[idx_b];)
 	// you have to iterate over all indices in the ibo (every two ibo entries form a primitive e.g. ibo[0] and ibo[1] are the indices of the first primitive)
 	// the result can best be seen in the canonical volume
+	
     var primitives = new Array();
-
+	var k = 0;
 	
-	
-	
-	
-
+	for(var i = 0; i < ibo.length; i+=2)
+	{
+		primitives[k] = [ vertexStream[ibo[i]], vertexStream[ibo[[(i+1)]]] ];
+		k+=1;
+	}
     if(this.verbose) console.log("    - #primitives [out]: " + primitives.length);
 
     return primitives;
@@ -203,7 +205,16 @@ RenderingPipeline.prototype.LineCulling = function (a, b) {
     // TODO: implement line culling depending on the culling mode (this.culling)
     // this.culling: 0 = false, 1 = backface culling, -1 = frontface culling
 	// the result can best be seen in the canonical volume
-    return false; // replace me: atm everything is not culled
+	//console.log(a[2]);
+	if (this.culling == 0)
+		return false;
+	
+    else if(this.culling == 1)
+	{
+		return true;
+	}
+	else 
+		return false; // replace me: atm everything is not culled
 }
 
 RenderingPipeline.prototype.ClippingStage = function (primitives) {

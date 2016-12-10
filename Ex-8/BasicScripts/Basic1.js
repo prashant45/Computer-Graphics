@@ -105,15 +105,6 @@ var Basic1 = function () {
         //              to the viewing direction are also culled
         //              despite floating point imprecision.
 
-		/*var a = b = c = p = q = o = vec3.create(); 
-		b = [lineSegment.startPoint.x, lineSegment.startPoint.z, 0.0];
-		a = [lineSegment.endPoint.x, lineSegment.endPoint.z, 0.0];
-		a = [0.0, 1.0, 0.0];
-		vec3.subtract(p, a, b);
-		vec3.subtract(q, c, a);
-		vec3.cross(o, p, q);
-		console.log(p);*/
-		
 		var produ = lineSegment.endPoint.x - lineSegment.startPoint.x;
 		if(produ > -epsilon)
 			return true;
