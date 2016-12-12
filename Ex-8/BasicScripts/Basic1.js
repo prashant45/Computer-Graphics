@@ -105,8 +105,8 @@ var Basic1 = function () {
         //              to the viewing direction are also culled
         //              despite floating point imprecision.
 
-		var produ = lineSegment.endPoint.x - lineSegment.startPoint.x;
-		if(produ > -epsilon)
+		var k = lineSegment.endPoint.x - lineSegment.startPoint.x;
+		if(k > -epsilon)
 			return true;
 		else		
 			return false;

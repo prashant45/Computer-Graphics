@@ -26,6 +26,8 @@ var Basic2 = function () {
 
         // 1. Set up a color as a return value, and initialize it with the 
         //    desired background color.
+		
+		// **********	Setting white background **********
 		var color = vec3.create();
 		color = [255, 255, 255];
 		
@@ -33,28 +35,28 @@ var Basic2 = function () {
         //    them one after another.
 		for (var i = 0; i < images.length; ++i)
 		{
-			var current_alpha = images[i][index+3];
 			
-			if(current_alpha!=0)
-			{
-				// ********** Ex : Red Channel value **********
-				//outputRed = (foregroundRed * foregroundAlpha) + (backgroundRed * (1.0 - foregroundAlpha))
-				
-				color[0] = images[i][index] * alphas[i] + color[0] * (1 - alphas[i]);
-				color[1] = images[i][index+1] * alphas[i] + color[1] * (1 - alphas[i]);
-				color[2] = images[i][index+2] * alphas[i] + color[2] * (1 - alphas[i]);	
-			}
-		}
-		
-
         // 3. Compute the resulting alpha value for the current pixel.
         //    If it is a background pixel of the current image (denoted
         //    with a zero alpha channel value), it should not contribute to the
         //    resulting image. Otherwise, it should contribute with the 
         //    alpha value given through the sliders.
+		
+			var current_alpha = images[i][index+3];
+			if(current_alpha!=0)
+			{
 
         // 4. Compute the resulting color using alpha blending in all
         //    three color channels.
+		
+				// ********** Ex : Red Channel value **********
+				//outputRed = (foregroundRed * foregroundAlpha) + (backgroundRed * (1.0 - foregroundAlpha))
+				
+				color[0] = images[i][index] * alphas[i] + color[0] * (1 - alphas[i]);
+				color[1] = images[i][index+1] * alphas[i] + color[1] * (1 - alphas[i]);
+				color[2] = images[i][index+2] * alphas[i] + color[2] * (1 - alphas[i]);
+			}
+		}
 
         // 5. Return the resulting color. Replace the following dummy line.
         return color;

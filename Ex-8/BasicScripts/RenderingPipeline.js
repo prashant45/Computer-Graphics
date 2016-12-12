@@ -45,7 +45,12 @@ DepthBuffer.prototype.TestAndSetFragment = function (x, valueF, depthTestMode) {
     // TODO: implement the depth test based on the depth test mode (depthTestMode) and the depth value in fixed point representation
     // depthTestMode: 0 = no depth test, 1 = pass if less, -1 = pass if greater
 	
-    if (depthTestMode == 1) // adapt this condition
+	// *********	No Depth Test	*********
+	if(depthTestMode == 0)		
+		return true;
+	
+	// *********	Pass less	*********
+    else if (depthTestMode == 1) // adapt this condition
 	{ 
         if(newValue < oldValue)
 		{
@@ -53,6 +58,8 @@ DepthBuffer.prototype.TestAndSetFragment = function (x, valueF, depthTestMode) {
 			return true;
 		}
 	}
+	
+	// *********	Pass greater	*********
 	else if(depthTestMode == -1)
 	{
 		if(newValue > oldValue)
@@ -61,8 +68,6 @@ DepthBuffer.prototype.TestAndSetFragment = function (x, valueF, depthTestMode) {
 			return true;
 		}
 	}
-	else
-		return false;
 }
 
 function RenderingPipeline(depthBuffer, renderTarget) {

@@ -1,0 +1,5 @@
+Z-fighting occurs when 2 or more primitives have similar depth values.
+When there is no culling, there is a fight for the depth value of the primitive 
+because multiple primitives are in the view.
+In the front face and back face culling, we see the color of the primitive that
+wins the depth test.
