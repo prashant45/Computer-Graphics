@@ -1,0 +1,106 @@
+﻿<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./resources/css/print.css">
+
+    <meta name="lecture" content="Computer Graphics">
+    <meta name="exerciseNr" content="2">
+    <meta name="exercisePrefix" content="Exercise">
+    <meta name="term" content="Winter Term 2016/17">
+    <meta name="dueDate" content="October 31, 2016, 11:59 pm">
+
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script type="text/javascript" src="./resources/js/sheet.js"></script>
+    <script type="text/javascript" id="advanced1" async src="AdvancedScripts_Images/Advanced1.js"></script>
+    <script type="text/javascript" src="BasicScripts_Images/Helper.js"></script>
+</head>
+
+
+<body>
+    <page size="A4">
+        <content>
+            <exercise prefix="Basic Exercises" title="Rasterization" points=10>
+                <task title="Bresenham Line Rasterization" points=7 submitfile="Basic1.js">
+                    <canvas class="floatLeft" id="canvas1" width=200 height=200 data-call="setupBresenham" data-call-src="./BasicScripts_Images/Basic1.js"><img class="wait"></canvas>
+
+                    <p>
+                        From the first exercise you already know the HTML-Element of type <code>Canvas</code>.
+                        It also has an explicit size of 200x200 that you can draw into.
+                        For this task we want you to draw a line using the Bresenham Algorithm by setting the pixels of said canvas in the function <code>bresenham()</code>.
+                        You find the source code of this assignment in the javascript file <code>Basic1.js</code>.
+                    </p>
+                    <p>
+                        Use the helper function <code>setPixelS()</code> provided in <code>Helper.js</code> to set a pixel if needed.
+                        Note that this helper function does not only set one pixel but a square of pixels depending on the variable <code>pixelScaleCanvas1</code>.
+                        The usage of the function is shown in <code>RenderCanvas1()</code> where start and end point of the line is drawn.<br />
+                        You can adjust the size of the pixel square using the slider below:<br />
+                        <input type="range" min="1" max="10" step="1" value="10" onchange="onChangePixelScaleCanvas1(this.value)" />
+                    </p>
+                    <p>
+                        Using the left mouse button you can change the start point of the line.
+                        If you hold [ctrl] you can change the end point.
+                    </p>
+                </task>
+
+                <!-- ------------------------------------------------------------------------------------------------------------- -->
+                <task title="Flood Fill"  points=3 submitfile="Basic2.js, Basic2.txt">
+
+                    <subtask title="Recursive Flood Fill" points=2>
+                        <canvas id="canvas2" width=200 height=200 class="floatRight" data-call="setupFloodFill" data-call-src="./BasicScripts_Images/Basic2.js"></canvas>
+                        <p>
+                            In this task we want to implement flood fill.
+                            Flood fill is a simple algorithm to fill a 2d object that is defined by a 2d boundary.
+                            Implement the algorithm in <code>floodFill4()</code> such that it considers the four direct neighbours of a pixel.
+                            You find the source code of this assignment in the javascript file <code>Basic2.js</code>.
+                        </p>
+                        <p>
+                            The algorithm gets a seed point and a color as input.
+                            Starting from this pixel position the color of the current pixel is set and the <code>floodFill4()</code> function is recursivley called for the surrounding pixels.
+                            The recursion stops if the pixel already has the target color.
+                            Note that the boundary has the same color as the target fill color.
+                        </p>
+                        <p> Use the helper functions <code>setPixel()</code> and <code>getPixel()</code> to access a pixel if needed. </p>
+                        <p> Using the left mouse button you can change the seed point. </p>
+                    </subtask>
+                    <subtask title="Recursive Flood Fill: Pros and Cons" points=1>
+                        <p>
+                            State the pros and cons of the recursive flood fill algorithm. Write your answer in <code>Basic2.txt</code>
+                            <object width="100%" type="text/plain" data="./BasicScripts_Images/Basic2.txt" border="1"></object>
+                        </p>
+                    </subtask>
+                </task>
+
+            </exercise>
+        </content>
+    </page>
+
+    <page size="A4">
+        <content>
+            <exercise prefix="Advanced Exercises" title="Rasterization" points=10>
+                <!-- ------------------------------------------------------------------------------------------------------------- -->
+                <task title="Scanline Algorithm" points=10 submitfile="Advanced1.js">
+                    <canvas id="canvas3" width=200 height=200 class="floatLeft" data-call="setupScanline" data-call-src="./AdvancedScripts_Images/Advanced1.js"></canvas>
+                    <p>
+                        In this task you are asked to implement the Scanline Alogrithm used to rasterize a solid polygon.
+                        You find the source code of this assignment in the javascript file <code>Advanced1.js</code>.
+                        Have a look at the already existing functions to create an edge table (<code>createEdgeTable()</code>) and an active edge table (<code>createActiveEdgeTable()</code>).
+                        Note that the entries of the edge table are sorted by <code>y_lower</code>.
+                        Use these functions to initialize the Scanline Algorithm, implement the function <code>scanline()</code>.
+                    </p>
+                    <p>
+                        The scanline algorithm starts at <code>y = 0</code> and iterates while <code>y < image.height</code>.
+                        In every iteration the active edge table is updated.
+                        To add a new entry in an active edge table use <code>activeEdgeTable.entries.push(new createActiveEdgeTableEntry(...));</code> and <code>activeEdgeTable.nEntries++;</code>.
+                        After updating the active edge table, you have to sort the table along the x-axis.
+                        The sorted active edge table allows us to easily set the pixels in the current pixel row, use <code>setPixel()</code> to set the pixel with the color of the polygon (<code>polygon.color</code>)
+                    </p>
+                </task>
+            </exercise>
+        </content>
+    </page>
+</body>
