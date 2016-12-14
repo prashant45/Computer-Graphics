@@ -1,0 +1,238 @@
+﻿<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./resources/css/print.css">
+
+    <meta name="lecture" content="Computer Graphics">
+    <meta name="exerciseNr" content="9">
+    <meta name="exercisePrefix" content="Exercise">
+    <meta name="term" content="Winter Term 2016/17">
+    <meta name="dueDate" content="December 19, 2016, 11:59 pm">
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script type="text/javascript" src="./resources/js/sheet.js"></script>
+
+    <script type='text/javascript' src='http://www.x3dom.org/download/x3dom.js'> </script>
+    <link rel='stylesheet' type='text/css' href='http://www.x3dom.org/download/x3dom.css'></link>
+
+</head>
+
+
+<body>
+
+    <page size="A4">
+        <content>
+
+            <exercise prefix="Basic Exercises" title="Geometry" points=10>
+                <h3>General Information</h3>
+                <p>
+                    The exercise sheet consists of an offline part and a programming part.
+                    You have to hand in your solution marked as <b><font color="red">OFFLINE HAND-IN</font></b> using the LS9 mailbox.
+                    You already know this mailbox from AlgoKS, it is next to room 01.133.
+                    Make sure that you <b>write your names on every sheet</b> you hand in!
+                    Your <b>solution for 9.3</b> should be handed in <b>via EST</b> as usual.
+                </p>
+
+
+                <task title="Directed Edge" points=4 submitfile="OFFLINE HAND-IN">
+                    <p>
+                        From the lecture you know that the directed edge data structure is a way to represent triangle meshes.
+                    </p>
+
+                    <subtask title="Directed Edge - Data Structure" points="2">
+                        <p>
+                            Apply this data structure to the mesh shown below using the list next to it.
+                            The edges are numbered from 0 to 20 and a triangle is formed by three consecutive edges in counterclockwise order (for example, $e_{0}$, $e_{1}$ and $e_{2}$ form the triangle $\Delta(v_{6},v_{5},v_{3})$).
+                            The field 'neighbor' should contain the index of the neighboring edge or -1 if there is none.
+                        </p>
+                        <p>
+                            <img width="550" style="border:none" src="./resources/images/directed_edge.svg"></img>
+                        </p>
+                    </subtask>
+
+                    <subtask title="Directed Edge - Vertex Face Circulator" points="2">
+                        <p>
+                            Write an algorithm in pseudo code which returns all triangles around the point $v_{5}$ in clockwise order.
+                            As input, the algorithm initially receives an arbitrary edge which is originated at $v_{5}$.
+                            A triangle is specified by an index, which can be computed from any of its edges by $\left\lfloor e/3 \right\rfloor$.
+                            Please make use of the following functions:
+                            <ul>
+                                <li>
+                                    <code>next(e)</code>: based on the edge <code>e</code>, returns the next edge within the same triangle
+                                </li>
+                                <li>
+                                    <code>neigh(e)</code>: returns the neighbor of <code>e</code>
+                                </li>
+                                <li>
+                                    <code>append(i)</code>: writes the index <code>i</code> to the output list
+                                </li>
+                            </ul>
+                        </p>
+                    </subtask>
+                </task>
+
+                <task title="Newell Formula" points=2 submitfile="OFFLINE HAND-IN">
+                    <p>
+                        In this exercise, we have a look at the computation of normals in a triangle fan. Given the following triangle fan with vertices $P_i$, 
+                        the area of a triangle $T_i$ is given by the value $s_i$
+                        and the corresponding surface normal is $\vec{n}_i$ (normalized).
+                    </p>
+                    <center>
+                        <img width="250" style="border:none" src="./resources/images/trianglefan_narrow.svg"></img>
+                    </center>
+                    <p>
+                        
+                        Now, we want to compute the normal at point $P_0$ using the following two formulae:
+
+                        $$N_0 = 2\cdot\sum_{i=1}^{n}{s_i \vec{n}_i}$$
+                        $$M_0 = \sum_{i=1}^{n}{\left[(P_i - P_0)\times (P_{i+1} - P_0)\right]},~~P_{n+1}=P_1$$
+
+                        Show that the normal $N_0$ (not normalized!) that you get by weighting surface normals with the triangle area is the same as computing $M_0$ using the so-called Newell formula
+                        (So show $M_0 =  N_0$).
+                    </p>
+                </task>
+
+                <task title="3D Scene Graph" points="4" submitfile="Basic3.js">
+
+                    <p>
+                        In this task, you should deal with <b>x3dom</b>, a HTML-based 3D framework which creates and renders 3D content specified in HTML markups. 
+                        Because of the hierarchical nature of HTML, this framework is optimal for the creation of a scene graph.
+                    </p>
+
+                    <x3d width='200px' height='200px' class="floatRight">
+                        <scene>
+
+                            <!-------------------------------------------
+                              ---CONSTRUCTION OF THE THREE BOXES SCENE---
+                              ------------------------------------------->
+
+                            <background groundColor="0.9 0.7 0" skycolor="0.8 0.8 1"></background>
+
+                            <!-- first transformation, which scales its children along the x axis and contains ... -->
+                            <transform scale="2 1 1">
+                                
+                                <!-- ... a blue box -->
+                                <shape>
+                                    <appearance>
+                                        <material diffusecolor='0 0 1' />
+                                    </appearance>
+                                    <box></box>
+                                </shape>
+
+                                <!-- ... and a second transformation, which scales its children to half as big, lifts them a little and contains ... -->
+                                <transform scale='0.5 0.5 0.5' translation="0 1.5 0">
+                                    
+                                    <!-- ... a red box -->
+                                    <shape>
+                                        <appearance>
+                                            <material diffusecolor='1 0 0' />
+                                        </appearance>
+                                        <box></box>
+                                    </shape>
+
+                                    <!-- and a third transformation, which scales its children to half as big, lifts them a little and contains ... -->
+                                    <transform scale='0.5 0.5 0.5' translation="0 1.5 0">
+
+                                        <!-- ... a green box -->
+                                        <shape>
+                                            <appearance>
+                                                <material diffusecolor='0 1 0' />
+                                            </appearance>
+                                            <box></box>
+                                        </shape>
+
+                                    </transform>
+
+                                </transform>
+
+                            </transform>
+
+                            <transform translation="1 0 2">
+                                <shape>
+                                    <appearance>
+                                        <material diffusecolor='1 1 0' transparency='0.3'/>
+                                    </appearance>
+                                    <sphere></sphere>
+                                </shape>
+                            </transform>
+
+                        </scene>
+                    </x3d>
+
+                    <p>
+                        For a short explanation of x3dom, consider the simple image on the right (showing three stacked boxes and a transparent ball) and have a look at the HTML code producing it in <code>index.html</code>.
+                        As you can see, the scene consists of <code>transform</code>s and <code>shape</code>s in a hierarchical way: Transforms can contain both shapes and further
+                        transforms. Shapes contain renderable geometry, such as boxes or spheres, and <code>appearance</code> nodes which specify properties of the rendered geometry, for example color and transparency. 
+                    </p>
+                    <p> 
+                        You can drag around the scene using the mouse. Feel free to change the example code to get a feeling for the framework.
+                    </p>
+
+                    <x3d width='250px' height='300px' style="border:none" class="floatLeft">
+                        <scene id="fractal" data-call="Basic3.start" data-call-src="./BasicScripts/Basic3.js">
+                            <viewpoint id="frontView" description="camera" set_bind="true"></viewpoint>
+                            <viewpoint id="merryChristmas" position="7 7 7" orientation="-0.58902 0.77371 0.23329 0.99599" set_bind="false"></viewpoint>
+                        </scene>
+                    </x3d>
+
+                    <p>
+                        Your task is to set up a so-called Koch fractal in 3D using the scene graph capability of x3dom. The fractal scheme is easy. Imagine a cube divided into $3\times3\times3$ smaller cubes. Now take
+                        away the eight corner cubes, the cube in the middle and the six cubes in the centers of the sides. The remaining cubes are then subdivided in the same way to produce even smaller cubes, and so on.
+                    </p>
+                    
+                    <p>
+                        Have a look at the code in <code>Basic3.js</code> and complete it to produce a Koch fractal in 3D!
+                    </p>
+
+                    <fieldset>
+                        <p>
+                            You can adjust the number of refinement steps using this slider:
+                        </p>
+                        <p>
+                            <input id="slider" type="range" min="0" max="3" value="1" onchange="Basic3.changeSteps(value);" />
+                        </p>
+                    </fieldset>
+
+                    <subtask title="Box Setup" points="2">
+                        <p>
+                            First, you should set up a single box to fill the root transformation created in <code>createScene()</code>. Try to comprehend the scene setup you find in this method and build the nodes
+                            necessary for the creation of a single white box in <code>createBox()</code>. Once you are done, you should see a big white cube in the center of the now dark blue canvas. Feel free to rotate
+                            it and look at it from all sides.
+                        </p>
+                    </subtask>
+
+                    <subtask title="Fractal Iteration" points="2">
+                        <p>
+                            Next, you should implement the function <code>constructChildTransformation()</code> which creates the transformations for the smaller boxes in each step. Follow the instructions
+                            in the according <code>TODO</code> and build the scene graph for the fractal!
+                        </p>
+                        <p>
+                            Once this works, you should see a shape formed of 12 cubes (the ones remaining after one step of the fractal scheme described above). Now you can use the slider to adjust
+                            the number of fractal scheme iterations to further subdivide the cube. And if you wonder what you have created here, try to set the steps to maximum and then use the button
+                            to change your point of view &#9786;! 
+                        </p>
+                        <center>
+                            <button onclick="Basic3.changeViewingMode();"> Do not click this until you are done!</button>
+                        </center>
+                        <center id ="hidden" style="display:none;">
+                            <b><big>&#10052 Merry Christmas! &#10052</big></b>
+                        </center>
+                    </subtask>
+
+
+                    
+                </task>
+            </exercise>
+        </content>
+    </page>
+
+</body>
