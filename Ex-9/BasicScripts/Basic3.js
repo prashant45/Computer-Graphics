@@ -19,9 +19,18 @@ var Basic3 = function () {
         //              their usage in createScene().
 
         var shape = document.createElement("shape");
-        return shape;
-
-    }
+		var box = document.createElement("box");
+		var appearance = document.createElement("appearance");
+		var material = document.createElement("material");
+		
+		material.setAttribute("diffusecolor", "1 1 1");
+		
+		appearance.appendChild(material);
+		shape.appendChild(appearance);
+		shape.appendChild(box);
+		
+		return shape;
+	}
 
     function refine(parents) {
         // refine each of the transformations ("parents") into 12 single transformations
@@ -60,8 +69,15 @@ var Basic3 = function () {
         //              Again, use createElement(), setAttribute()
         //              and appendChild().
         //              Replace the following dummy line.
-
-        return parent;
+		
+		var transformation = document.createElement("transformation");
+		
+		transformation.setAttribute("scale", "0.33 0.33 0.33");
+		transformation.setAttribute("translation", translation);
+		
+		parent.appendChild(transformation);
+		
+		return parent;
 
     }
 
