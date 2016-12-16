@@ -1,0 +1,159 @@
+"use strict";
+
+///////////////////////////
+//// global variables  ////
+///////////////////////////
+
+// pixel scale
+var pixelScaleCanvas1 = 10;
+
+// line
+var line = new Line(new Point(10 / pixelScaleCanvas1, 10 / pixelScaleCanvas1),
+                    new Point(190 / pixelScaleCanvas1, 190 / pixelScaleCanvas1),
+                    new Color(0, 0, 0));
+
+//////////////
+//// gui  ////
+//////////////
+
+// event listener for gui
+function onChangePixelScaleCanvas1(value) {
+    // rescale line
+    var s = pixelScaleCanvas1 / value;
+    line.startPoint.x = line.startPoint.x * s;
+    line.startPoint.y = line.startPoint.y * s;
+    line.endPoint.x = line.endPoint.x * s;
+    line.endPoint.y = line.endPoint.y * s;
+	
+	line.currentPoint.x = line.currentPoint.x * s;
+	line.currentPoint.y = line.currentPoint.y * s;
+	
+    // set new scaling factor
+    pixelScaleCanvas1 = value;
+    // rerender scene
+    RenderCanvas1();
+}
+
+function onMouseDownCanvas1(e) {
+    var rect = document.getElementById("canvas1").getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+
+    console.log("onMouseDownCanvas1: " + x + " " + y);
+
+    // set new points
+    if (e.ctrlKey) {
+        line.endPoint.x = x / pixelScaleCanvas1;
+        line.endPoint.y = y / pixelScaleCanvas1;
+    }
+    else {
+        line.startPoint.x = x / pixelScaleCanvas1;
+        line.startPoint.y = y / pixelScaleCanvas1;
+		
+		line.currentPoint.x = x / pixelScaleCanvas1;
+		line.currentPoint.y = y / pixelScaleCanvas1;
+    }
+
+    // rerender image
+    RenderCanvas1();
+}
+
+
+//////////////////////////////
+//// bresenham algorithm  ////
+//////////////////////////////
+
+function bresenham(image, line) {
+    // ensure integer coordinates
+    var x0 = Math.floor(line.startPoint.x);
+    var y0 = Math.floor(line.startPoint.y);
+    var x1 = Math.floor(line.endPoint.x);
+    var y1 = Math.floor(line.endPoint.y);
+	
+	var new_x = Math.floor(line.currentPoint.x);
+	var new_y = Math.floor(line.currentPoint.y);
+
+    //////////////////////////
+    ///////   TODO   /////////
+    //////////////////////////
+
+    // TODO: compute deltas and update directions
+	
+	var dx = x1 - x0;
+	var dy = y1 - y0;
+	
+	
+
+	
+    // TODO: set initial coordinates
+	var p_new = (2 * dy) - dx;
+	var x = x0;
+	var y = yo;
+	
+	
+
+    // TODO: start loop to set nPixels, 
+    var nPixels = dx - 1; // TODO: think about how many pixels need to be set
+    for (var i = 0; i < nPixels; ++i) {
+        // TODO: set pixel use the helper function setPixelS()
+		
+		var currentPoint = new Point(x,y);
+		
+		if(p_old < 0)
+		{
+			p_new += (2 * dy);			
+			setPixelS(image, currentPoint, new Color(0, 0, 255), pixelScaleCanvas1);
+		}
+		else
+		{
+			p_new = p_old + (2*dy) - (2*dx);
+			line.currentPoint.x = new_x + 1;
+			line.currentPoint.y = new_y + 1;
+			setPixelS(canvas, line.currentPoint, new Color(0, 0, 255), pixelScaleCanvas1);
+		}
+		
+
+        // TODO: update error
+
+
+        // TODO: update coordinates depending on the error
+
+
+    }
+    //////////////////////////
+    ///////   TODO   /////////
+    //////////////////////////
+	
+}
+
+
+//////////////////////////
+//// render function  ////
+//////////////////////////
+
+function RenderCanvas1() {
+    // get canvas handle
+    var context = document.getElementById("canvas1").getContext("2d");
+    var canvas = context.createImageData(200, 200);
+
+    // clear canvas
+    clearImage(canvas, new Color(255, 255, 255));
+
+    // draw line
+    bresenham(canvas, line);
+
+    // draw start and end point with different colors
+    setPixelS(canvas, line.startPoint, new Color(255, 0, 0), pixelScaleCanvas1);
+    setPixelS(canvas, line.endPoint, new Color(0, 255, 0), pixelScaleCanvas1);
+
+    // show image
+    context.putImageData(canvas, 0, 0);
+}
+
+
+function setupBresenham(canvas) {
+    // execute rendering
+    RenderCanvas1();
+    // add event listener
+    document.getElementById("canvas1").addEventListener('mousedown', onMouseDownCanvas1, false);
+}

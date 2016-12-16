@@ -1,0 +1,8 @@
+Pro:
+- Algorithm is much easier and straight forward.
+- Clear statements and less time needed to write or debug the code.
+
+Cons:
+- Makes the algorithm slower.
+- It requires to maintain Stacks.
+- It usually uses more memory.
