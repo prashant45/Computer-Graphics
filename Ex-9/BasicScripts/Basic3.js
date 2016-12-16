@@ -70,14 +70,14 @@ var Basic3 = function () {
         //              and appendChild().
         //              Replace the following dummy line.
 		
-		var transformation = document.createElement("transformation");
+		var transform = document.createElement("transform");
 		
-		transformation.setAttribute("scale", "0.33 0.33 0.33");
-		transformation.setAttribute("translation", translation);
+		transform.setAttribute("scale", "0.33 0.33 0.33");
+		transform.setAttribute("translation", translation);
 		
-		parent.appendChild(transformation);
+		parent.appendChild(transform);
 		
-		return parent;
+		return transform;
 
     }
 
