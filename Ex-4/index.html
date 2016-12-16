@@ -1,0 +1,276 @@
+﻿
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./resources/css/print.css">
+
+    <meta name="lecture" content="Computer Graphics">
+    <meta name="exerciseNr" content="4">
+    <meta name="exercisePrefix" content="Exercise">
+    <meta name="term" content="Winter Term 2016/17">
+    <meta name="dueDate" content="November 14, 2016, 11:59 pm">
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script type="text/javascript" src="./resources/js/sheet.js"></script>
+
+    <script type="text/javascript" src="./BasicScripts/gl-matrix.js"></script>
+</head>
+
+
+<body>
+
+    <page size="A4">
+        <content>
+
+            <exercise prefix="Basic Exercises" title="Affine Transformations - Solar System" points=10>
+                An affine transformation in $\mathbb{R}^n$ is given by a $n\times n$-matrix  $\mathbf{A}$ and a vector $\vec{t}$:
+                $$ f(x) = \mathbf{A}\vec{x} + \vec{t} $$
+                $\mathbf{A}$ is called the <b>linear part</b> and $\vec{t}$ is called the <b>translational part</b> of $f$.
+
+                <task title="Affine Transformations" points=6 submitfile="Basic1.js">
+
+                    <subtask title="Linear Transformations" points=2>
+                        <p>
+                            In this task we want to implement some basic linear transformations (transformations with $\vec{t} = 0$),
+                            i.e. rotation, scaling and shearing. The corresponding functions can be found in
+                            <code>Basic1_1</code>.
+                            Implement them to rotate, scale and shear the input triangle by the given values.
+                        </p>
+                        <canvas class="floatRight" id="canvasBasic1_1" width=600 height=150 data-call="Basic1_1.start" data-call-src="./BasicScripts/Basic1.js">
+                            <img class="wait">
+                        </canvas>
+                    </subtask>
+
+                    <subtask title="Rotation Substituted by a Series of Shearing Transformations" points=1>
+                        <p>
+                            A rotation transformation can be substituted by a series of shear transformations:
+                            \begin{eqnarray}
+                            \nonumber
+                            \left(
+                            \begin{array}{*{3}{c}}
+                            \cos(\alpha)  & -\sin(\alpha)          \\
+                            \sin(\alpha)   & \cos(\alpha)        \\
+                            \end{array}
+                            \right)
+                            =
+                            \left(
+                            \begin{array}{*{3}{c}}
+                            1  & -\tan(\frac{\alpha}{2})          \\
+                            0   & 1        \\
+                            \end{array}
+                            \right)
+                            \left(
+                            \begin{array}{*{3}{c}}
+                            1 &  0          \\
+                            \sin(\alpha)   & 1        \\
+                            \end{array}
+                            \right)
+                            \left(
+                            \begin{array}{*{3}{c}}
+                            1  & -\tan(\frac{\alpha}{2})          \\
+                            0   & 1        \\
+                            \end{array}
+                            \right)
+                            \end{eqnarray}
+
+                            Implement the shearing functions to perform a rotation and call them with the right parameters in <code>Basic1_2</code>.
+                            Render the triangle after each shearing step.
+                        </p>
+
+                        <canvas class="floatRight" id="canvasBasic1_2" width=600 height=150 data-call="Basic1_2.start" data-call-src="./BasicScripts/Basic1.js">
+                            <img class="wait">
+                        </canvas>
+                    </subtask>
+
+                    <subtask title="Composition of Affine Transformations" points=1>
+                        <p>
+                            Given two affine transformations $f_1$  and $f_2$
+                            with linear parts $\mathbf{A}_1$,
+                            $\mathbf{A}_2$ and translation vectors $\vec{t}_1$, $\vec{t}_2$ respectively, the composition $f_2 \circ f_1$ is also affine:
+                            $$f_1(x) = A_1x + \vec{t}_1 \text{ and } f_2(x) = A_2x +\vec{t}_2 \Rightarrow (f_2 \circ f_1)(x) = A_{1,2}x + \vec{t}_{1,2}$$
+                            Determine its linear part $A_{1,2}$ and its translation vector $\vec{t}_{1,2}$.
+
+                            Implement the corresponding formula in the function <code>Basic1_3.CompositeAffineTransformations()</code>.
+                            Below you see from left to right the input triangle, the triangle transformed with $f_1$, the triangle transformed with $f_1$ and $f_2$ in succession and the input triangle transformed with the composition of both transformations.
+                            Note that the two rightmost triangle images should be the same.
+                        </p>
+
+                        <canvas class="floatRight" id="canvasBasic1_3" width=600 height=150 data-call="Basic1_3.start" data-call-src="./BasicScripts/Basic1.js">
+                            <img class="wait">
+                        </canvas>
+                    </subtask>
+
+                    <subtask title="Affine Mapping" points=2>
+                        <p>
+                            In the following we consider the two-dimensional case $(n=2$).
+                            Given three points
+                            $$P_0=[a_0, b_0], \quad P_1=[a_1, b_1], \quad P_2=[a_2, b_2],$$
+                            show that there is a unique affine mapping $f$ such that
+                            $$
+                            f([0,0])= P_0, \qquad f([1,0])= P_1, \qquad f([0,1])= P_2
+                            $$
+                            and determine its linear part and its translation vector.
+
+                            Using this mapping you can transform the unit triangle (with the vertices $[1,0]$, $[0,1]$, $[0,0]$) to an arbitrary other triangle (with vertices $P_0$, $P_1$, $P_2$).
+                            Implement the formula in <code>Basic1_4.ComputeMapping()</code>.
+                            The result is shown below. On the left you see the unit triangle and on the right the target triangle. In the middle you see the transformed unit triangle.
+                        </p>
+
+                        <canvas class="floatRight" id="canvasBasic1_4" width=600 height=200 data-call="Basic1_4.start" data-call-src="./BasicScripts/Basic1.js">
+                            <img class="wait">
+                        </canvas>
+                    </subtask>
+                </task>
+
+                <task title="Solar System" points=4 submitfile="Basic2.js">
+                    <p>
+                        From the first exercise you know that an affine transformation has the form:
+                        $$ f(x) = \mathbf{A}\vec{x} + \vec{t} $$
+                        Thus, the transformation consists of a multiplication and an addition.
+                        We now reformulate the transformation to:
+                        $$ \hat{f}(x) = \left( \begin{array}{c} f(x) \\ 1 \end{array} \right) = \left[ \begin{array}{cc} \mathbf{A} & \vec{t} \\ {\begin{array}{cc} 0 & 0 \end{array}} & 1 \end{array} \right] \left( \begin{array}{c} \vec{x} \\ 1 \end{array} \right)$$
+                        As can be seen, by lifting the coordinates from 2D to 3D, we can represent the affine transformation as a linear transformation.
+                        The new coordinate $\left( \begin{array}{c} \vec{x} \\ 1 \end{array} \right)$ is called homogeneous coordinate.
+                        For this task we want you to work in homogeneous coordinates.
+                        The composition of two affine transformations in homogeneous coordinates is a simple matrix-matrix multiplication of the corresponding matrices.
+                        Have a look at the vertex shader <code>shader_default.vs</code> to see how the transformation is applied.
+                    </p>
+                    <canvas class="floatLeft" id="canvasSolarSystem" width=600 height=300 data-call="Basic2.webGLStart" data-call-src="./BasicScripts/Basic2.js">
+                        <img class="wait">
+                        <shader id="basic-shader-vs-default" type="--vertex" src="./BasicScripts/shader_default.vs"></shader>
+                        <shader id="basic-shader-fs-default" type="--fragment" src="./BasicScripts/shader_default.fs"></shader>
+                        <shader id="basic-shader-fs-luminary" type="--fragment" src="./BasicScripts/shader_luminary.fs"></shader>
+                        <shader id="basic-shader-fs-orbit" type="--fragment" src="./BasicScripts/shader_orbit.fs"></shader>
+                        <shader id="basic-shader-fs-sun" type="--fragment" src="./BasicScripts/shader_luminary.fs"></shader>
+                    </canvas>
+                    <p>
+                        In this task you are asked to implement the rotation and translation of the luminaries in a solar system.
+                        Note that some luminaries rotate around others resulting in a hierarchical structure.
+                        A luminary consists of several attribute like its radius, the radius of the orbit, the color and the shader program used to draw the luminary.
+                        The most important attributes are the <code>luminary.speed</code> value which specifies the rotational speed of the luminary around the parent object
+                        and the <code>luminary.modelMatrix</code> which places the luminary relatively to the parent object in space.
+                    </p>
+                    <p>
+                        You are asked to implement the recursive <code>Basic2.drawLuminary()</code> function.
+                        The function is called with the root of the solar system - the sun (see <code>drawScene()</code>).
+                        For each luminary, you have to concatenate three matrices:
+                    </p>
+                    <ul>
+                        <li>
+                            the rotation matrix that rotates the luminary around its parent object - This one has to be set up by you.
+                        </li>
+                        <li>
+                            the matrix that places the luminary with respect to the parent object in space - This one is stored in <code>luminary.modelMatrix</code>.
+                        </li>
+                        <li>
+                            the parent model matrix - This one is given as an argument (<code>modelMatrixParent</code>).
+                        </li>
+                    </ul>
+                    <p>
+                        First set up the rotation matrix. Next, concatenate the three matrices together - be careful with the order!
+                    </p>
+                    <p>
+                        The computed transformation is used to draw the luminary using a shader similar to the one that you have already implemented in the last exercise sheet.
+                    </p>
+                    <p>
+                        Finally, you have to call the <code>drawLuminary()</code> function recursively for each child, passing on the computed model matrix.
+                    </p>
+                </task>
+
+
+            </exercise>
+        </content>
+    </page>
+
+    <page size="A4">
+        <content>
+
+            <exercise prefix="Advanced Exercises" title="Affine Transformations - Solar System" points=10>
+
+                <task title="Solar System" points=10>
+                    <canvas class="floatLeft" id="canvasSolarSystemAdvanced" width=600 height=600 data-call="Advanced.webGLStart" data-call-src="./AdvancedScripts/Advanced.js">
+                        <img class="wait">
+                        <shader id="advanced-shader-vs-default" type="--vertex" src="./BasicScripts/shader_default.vs"></shader>
+                        <shader id="advanced-shader-fs-default" type="--fragment" src="./BasicScripts/shader_default.fs"></shader>
+                        <shader id="advanced-shader-fs-luminary" type="--fragment" src="./AdvancedScripts/shader_luminary.fs"></shader>
+                        <shader id="advanced-shader-fs-sun" type="--fragment" src="./AdvancedScripts/shader_sun.fs"></shader>
+                    </canvas>
+                    <p>
+                        Adjust reference time for rotations:
+                        <input type="range" id="advanced_time_slider" min="0" max="500" step="1" value="20" onchange="Advanced.onChangeTimeSlider(this.value);" />
+                    </p>
+
+                    <subtask title="Rotating planets" points=3 submitfile="Advanced.js">
+                        <p>
+                            Adapt the transformation code from the Basic Exercise to fit the framework of the Advanced Exercise.
+                            As you will notice, a luminary has two rotational speed factors now.
+                            The parameter <code>rotationalSpeedAroundParentAxis</code> gives the rotational speed of a luminary around its parent object.
+                            The parameter <code>rotationalSpeedAroundOwnAxis</code> gives the rotational speed of a luminary around its own axis.
+                            Note that the parameter <code>rotationalSpeedAroundOwnAxis</code> should only have influence on the rotation of the corresponding luminary, but not on the child objects!
+                        </p>
+                    </subtask>
+
+                    <subtask title="User Interaction" points=2 submitfile="Advanced.js">
+                        <p>
+                            In this task you are asked to implement a user interface.
+                            The user should be able to adjust the speed of the rotations using the slider below the canvas.
+                            The corresponding event is already implemented and the factor that should control the global speed of rotations is stored in the global variable <code>timeRef</code>.
+                            In addition to this, we want you to give the user the possibility to drag and zoom.
+                            The translation and zooming factors are stored globally in <code>zoom</code> and <code>translation</code>.
+                            Hint: To draw the scene, an inital transformation has to be specified (see <code>initalTransf</code> in <code>drawScene()</code>).
+                        </p>
+                    </subtask>
+
+                    <subtask title="Procedural Sun Shader" points=4 submitfile="shader_sun.fs">
+                        <p>
+                            As you might have already seen, the shader program for the sun is different to the shader program for the earth and the moon.
+                            In this task you are asked to implement a nice sun shader.
+                            First of all we want to add some glowing to the sun.
+                            As in the previous exercise sheets, we compute the distance from every pixel to the center of the circle.
+                            If the pixel is outside the inner radius (<code>uniform radius</code>) but inside the corona of the sun (<code>3*radius</code>),
+                            we want to add some "glowing".
+                            Instead of a linear falloff that we used in the previous exercise sheets to compute an alpha value, we want to use a falloff defined by:
+                            $\alpha_{glow}(s) = s^6$.
+                            Here, $s$ is the distance of a pixel to the surface of the circle.
+                            You should now see a glowing sun.
+                        </p>
+                        <p>
+                            To improve the visual result, we now add some sunrays.
+                            The intensity of a sunray is generated using procedural noise.
+                            We already provide a suitable random number function <code>noiseDir()</code>.
+                            This function takes a 2D direction and the current global time (use <code>uniform time</code>) as input.
+                            For a single pixel we first determine the ray on which it lies (if the pixel is inside the corona).
+                            Using this direction and the global time we can use the <code>noiseDir()</code> function to compute the intensity of this ray $I_{ray}$.
+                            The intensity of the ray falls off with the distance to the surface of the sun.
+                            Use a quadratic falloff.
+                            Thus, the alpha value for a sunray that goes to the pixel is computed by:
+                            $\alpha_{ray}(dir, time, s) = s^2 * noiseDir(dir,time)$.
+                            At the end we add both alpha values and draw the pixel with the sun color and the computed alpha value.
+                        </p>
+                    </subtask>
+
+                    <subtask title="Procedural Luminary Shader" points=1 submitfile="shader_luminary.fs">
+                        <p>
+                            In this task we want to use the provided procedural noise generator to texture the earth and the moon.
+                            The random texture has to be static for a luminary, i.e. it should not change in time.
+                            In contrast to the rays of the previous assignment, every texel should get another value.
+                            Thus, the function <code>noiseDir(dir,time)</code> has to be called with a constant time (e.g. 0) and the texture coordinate (<code>vTex</code>).
+                            The return value is used as a linear weight between the two colors that are assigned to the fragment shader (<code>color0</code> and <code>color1</code>).
+                        </p>
+                    </subtask>
+
+                </task>
+
+            </exercise>
+        </content>
+    </page>
+</body>
