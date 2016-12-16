@@ -1,0 +1,419 @@
+﻿
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./resources/css/print.css">
+
+    <meta name="lecture" content="Computer Graphics">
+    <meta name="exerciseNr" content="1">
+    <meta name="exercisePrefix" content="Exercise">
+    <meta name="term" content="Winter Term 2016/17">
+    <meta name="dueDate" content="October 24, 2016, 11:59 pm">
+
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script type="text/javascript" src="./resources/js/sheet.js"></script>
+    <script type="text/javascript" id="advanced1" async src="AdvancedScripts_Images/Advanced1.js"></script>
+</head>
+
+
+<body>
+    <page size="A4">
+            <content>
+                <h1>Preface</h1>
+                <p>
+                    Hello and welcome to the Computer Graphics exercise(s) in 2016.
+                    Starting this year, we have decided to improve our choice of exercises and give you the chance to apply your knowledge interactively.
+                </p>
+
+                <h2> Exercise Types</h2>
+                <p>
+                    We provide two modes of operation.
+                </p>
+                <p>
+                    <ul>
+                        <li>
+                            The first consists of the so-called <keyword>Basic Exercises</keyword>.
+                            You are required to complete <b>50%</b> of the Basic Exercises to be allowed to participate in the final examination and receive <keyword>5 ECTS points</keyword>.
+                        </li>
+                        <li>
+                            The second mode includes the <keyword>Basic Exercises</keyword> and, additionally, <keyword>Advanced Exercises</keyword>.
+                            The combined course earns you <keyword>7.5 ECTS points</keyword> if you complete at least <b>50%</b> of each part (Basic and Advanced).
+                        </li>
+                    </ul>
+                </p>
+                <p>
+                    Both courses allow you to exercise your programming skills.
+                    We suggest you have a look at both, they are quite interesting and once you complete the basic section, there is really not much standing in your way of having even more fun.
+                </p>
+
+
+                <h2> Exercise Distribution and Submission</h2>
+                <p>
+                    The distribution of exercises is done via <a href="https://www.studon.fau.de/studon/goto.php?target=fold_1683762">StudOn</a>.
+
+                    Our exercises will be collected using the <a href="https://est.informatik.uni-erlangen.de/de/login.html">Exercise Submission Tool</a>.
+                    Please register an account with them.
+					
+					Once you have completed your assignments, we ask you to upload a set of specified source files using EST.
+                    You will also receive comments and feedback on your submissions using the facilities EST provides.
+
+                    The assignments can be completed in <b>teams of two</b>, however depending on the task, we reserve the right to demand individual submissions.
+                    You can configure EST to indicate one partner as the one handing in your solution, which allows us to grade your joint submission without confusion.
+                </p>
+                <h2>Development Tools and Work Stations</h2>
+                <p>
+                    The exercises will introduce you to a diverse set of environments.
+                    We begin with <code>HTML5</code> and <code>Javascript</code> and develop directly for the browser. Please use <b>Firefox</b> unless specified otherwise. 
+                </p>
+
+                <p>Later we introduce
+                  <code>WebGL</code> and after that, we move to
+                  <code>OpenGL</code> and
+                  <code>C++</code>.
+                </p>
+				
+
+                <p>The exercises will be held in the
+                <a href="https://wwwcip.informatik.uni-erlangen.de/cipPools/roomIndex.de.html#huber">Huber CIP</a> on Thursday and Friday from 9:00 am to 12:00 am.
+                You will have to register for access personally at the appointed
+                <a href="https://wwwcip.informatik.uni-erlangen.de/contactUs/consultationHours.de.html">opening hours</a>.
+                There might be additional information pinned to the notice boards in the Huber CIP.
+                Please distribute evenly over the available time slots, though the occupancy may vary over the course of the semester.</p>
+
+				
+				   <h2>Development with  <code>HTML5</code> and <code>Javascript</code> </h2>
+                <p>
+					Contemporary browers are powerful development environments and deployment platforms.
+					They are well suited for prototyping and <code>Javascript</code> is just another language you should have in your repertoire, although their idea of classes is rather ... confusing.
+                </p>
+					 <p>
+					Once you have opened our <code>index.html</code> file you should be able to analyze the web page via the context menu.
+					You will find a <code>console</code> , a <code>debugger</code> and several other tools that we do not care about.
+					 </p>
+					 <p>
+					Have a look at the <code>console</code>, there you see the message <code>"This is an exemplary log!"</code>.
+					Search for the corresponding source code in the <code>BasicScripts_Images</code> folder. The use of such a log should be fairly obvious.
+					 </p>
+					 <p>
+					Next, open the <code>debugger</code> and place a breakpoint in the source of <code>./BasicScripts_Images/Basic0.js</code> and figure out what to do with it.
+				
+                </p>
+
+                <h2> Your Tutors </h2>
+                <p>
+                    The exercise will be mentored by <a href="http://lgdv.cs.fau.de/people/card/jana/martschinke/">Jana Martschinke</a>, 
+                    <a href="http://lgdv.cs.fau.de/people/card/justus/thies/">Justus Thies</a>, and myself (<a href="http://lgdv.cs.fau.de/people/card/christoph/weber/">Christoph Weber</a>). 
+                    Feel free to contact us via <a href="mailto:cgtutors@i9.informatik.uni-erlangen.de">Email (cgtutors@i9.informatik.uni-erlangen.de)</a>. 
+                    Please use the provided email address instead of mailing us individually.
+
+                </p>
+                <p>
+                    Depending on our schedule you will also be supervised by Nikolai Hofmann and Lukas Riedersberger.
+                </p>
+            </content>
+    </page>
+
+
+
+    <page size="A4">
+            <content>
+                <exercise prefix="Basic Exercises" title="Drawing Circles"
+				points=10>
+
+                  <canvas class="floatLeft" id="canvas1" width=200 height=200 data-call="drawIntoCanvas" data-call-src="./BasicScripts_Images/Basic.js"><img class="wait"></canvas>
+
+                  <p>
+                      Left you see a HTML element of type <code>Canvas</code> with an explicit size of 200x200 that you can draw into.
+                      For this initial task we want you to draw a circle of creative color by setting the pixels of said canvas.
+                      We then want you to add a contour and finally to smooth the borders between color transitions.
+                  </p>
+
+                  <p>
+                      Inspect the source code of this assignment sheet and have a look at the <code>javascript code</code> referring to <code>"canvas1"</code>.
+                      You will need to copy the snippet to complete your tasks.
+                  </p>
+
+                  <p class="clearLeft">
+                      Below you see the circles of slightly different appearance.
+                      The left is solid green and centered around the middle and displays a radius of 50.
+                      The middle circle features an additonal contour in a darker shade of green.
+                      Both circles have a rather ragged border, which is a symptom of <a href="https://de.wikipedia.org/wiki/Antialiasing_(Computergrafik)">aliasing</a>.
+                      Enlarge the page to better observe the image artefacts.
+                      The right circle has smooth transitions, that can be computed by weighting and mixing colors.
+                  </p>
+                  <table class="centerContent boxes">
+                      <tr>
+                          <td> Solid Circle </td>
+                          <td> Circle with Contour  </td>
+                          <td> Smoothed Circle  </td>
+                      </tr>
+                      <tr>
+                          <td><img src="BasicScripts_Images/lsg1-1.png" /></td>
+                          <td><img src="BasicScripts_Images/lsg1-2.png" /></td>
+                          <td><img src="BasicScripts_Images/lsg1-3.png" /></td>
+                      </tr>
+                  </table>
+
+<!-- ------------------------------------------------------------------------------------------------------------- -->
+                  <task title="Rasterize a Circle Pixel by Pixel" 
+						points=6 submitfile="Submit_Task1-1.js">
+						
+                    <subtask title="Draw a Simple Circle"
+						points=2 >
+                      <canvas id="canvas1-1" width=200 height=200 class="floatRight" data-call="drawPixelwiseCircle" data-call-src="./BasicScripts_Images/Submit_Task1-1.js"></canvas>
+
+                      <p>
+                        Copy and modify the code and draw an opaque circle with a radius of 50 pixels around the center of the canvas (100, 100).
+                        Color only the pixels inside the circle.
+                      </p>
+                    </subtask>
+
+                    <subtask title="Draw a Circle with a Contour" points=2 >
+                        <canvas id="canvas1-2" width=200 height=200 class="floatRight" data-call="drawContourCircle" data-call-src="./BasicScripts_Images/Submit_Task1-1.js"></canvas>
+                      <script>
+
+                      </script>
+
+                      <p>
+                        Extend your solution by adding a contour of 10 pixels using a darker shade of the same interesting color you chose to begin with.
+                      </p>
+                    </subtask>
+
+                    <subtask title="Draw a Smooth Circle with Contour" points=2 >
+                        <canvas id="canvas1-3" width=200 height=200 class="floatRight" data-call="drawSmoothCircle" data-call-src="./BasicScripts_Images/Submit_Task1-1.js"></canvas>
+
+                      <p>
+                        You will notice the jagged contours in the sample solution images and in your canvases.
+                        This effect is well known and due to the limited screen resolution.
+                        Please provide a simple solution for smoothing such edges by mixing the colors sensibly and based on the distance to the circle center.
+                      </p>
+                    </subtask>
+                  </task>
+
+<!-- ------------------------------------------------------------------------------------------------------------- -->
+                <task title="Rasterize a Circle using <code>Context</code> Utilities" points=2 submitfile="Submit_Task1-2.js">
+                  <canvas id="canvas2" width=200 height=200 class="floatRight" data-call="drawArcCircle" data-call-src="./BasicScripts_Images/Submit_Task1-2.js"></canvas>
+
+                  <p>
+                    <code>Javascript</code> provides us with some rendering utilities for drawing  primitives, one of which is the <a href="http://www.w3schools.com/tags/canvas_arc.asp"><code>arc()</code></a>.
+                    Have a look at the documentation and implement the same circles as before.
+                    But instead of rendering into two separate canvases we want you to render two circles into the same render area (one with contour, one without).
+                    <ul>
+                        <li>
+                            Render a circle without countour at [50,100] with radius 45.
+                        </li>
+                        <li>
+                            Render a circle with countour at [150,100] with radius 45.
+                            The contour must be reduced by the same factor as the circle size.
+                        </li>
+                    </ul>
+                  </p>
+                </task>
+
+<!-- ------------------------------------------------------------------------------------------------------------- -->
+                <task title="Use SVG to Draw a Circle" points=2 submitfile="Submit_Task1-3.html">
+                  <svg width=200 height=200 class="floatRight" data-inner="./BasicScripts_Images/Submit_Task1-3.html"></svg>
+                  <p>
+                    Replicate the circles from the previous task using SVG.
+                    You will notice that vector graphics do not suffer from the same aliasing problems as your rasterized circles.
+                    The drawing is independent of resolution and the interpolation of color values is handled by the SVG drawing engine.
+                    <ul>
+                        <li>
+                            Render a circle without contour at [50,100] with radius 45.
+                        </li>
+                        <li>
+                            Render a circle with contour at [150,100] with radius 45.
+                            The contour must be reduced by the same factor as the circle size.
+                        </li>
+                    </ul>
+                  </p>
+                </task>
+              </exercise>
+            </content>
+    </page>
+
+
+
+    <page size="A4">
+            <content>
+              <exercise prefix="Advanced Exercises" title="Procedural Images"
+			  points=10>
+                <!-- ------------------------------------------------------------------------------------------------------------- -->
+                <task title="Render Mandelbrot and Julia Sets" points=10  submitfile="Submit_Task1-4.js">
+                  <p>Now that you know the HTML class <code>canvas</code>, it is time to draw something even more beautiful than the circle from <i>Basic Exercises 1</i>.  </p>
+                  <table class="boxes">
+                      <tr>
+                          <td>
+                              <img src="AdvancedScripts_Images/Mandelbrot_1.png" />
+                          </td>
+                          <td>
+                              <img src="AdvancedScripts_Images/Mandelbrot_2.png" />
+                          </td>
+                          <td>
+                              <img src="AdvancedScripts_Images/Mandelbrot_3.png" />
+                          </td>
+                          <td>
+                              <img src="AdvancedScripts_Images/Mandelbrot_4.png" />
+                          </td>
+                      </tr>
+                  </table>
+
+                  <p>
+                      In the middle of this page, you can see two <code>canvas</code>es. The left one will be filled with a rendering of the so-called Mandelbrot set during subtasks a) to c). The right one will show
+                      so-called Julia sets once you have implemented subtask d).
+                  </p>
+                  <p>
+                      The <a href="https://en.wikipedia.org/wiki/Mandelbrot_set" target="_blank">Mandelbrot set</a> (named after the Polish mathematician Benoit Mandelbrot) is the set of complex numbers \(c = Re(c) + i \cdot Im(c)\) for which the sequence \((z_n), n \in \mathbb{N}\) converges.
+                      The sequence is given by the following formula:
+                      \begin{align}
+                      z_0 &= 0 \\
+                      z_{n+1} &= f_c(z_n) = z_n^2 + c
+                      \end{align}
+                  </p>
+                  <p>
+                      The <a href="https://en.wikipedia.org/wiki/Julia_set" target="_blank">Julia sets</a> (named after the french mathematician Gaston Julia) implemented in subtask d) are sets of complex numbers closely related to the mandelbrot set and also generated in a similar manner, using function \(f_c\).
+                  </p>
+                  <p>
+                      Even though the above formula does not look like magic or art at the first sight, the pictures produced by its application (interpreting pixels of the two-dimensional plane as complex numbers) exhibit great beauty,
+                      as you can see in the example pictures above. Your task will be to implement an interactive rendering tool for the Mandelbrot set (and, later on, for Julia sets) to explore its bizarre, yet gorgeous silhouette.
+                  </p>
+
+                  <center><table class="boxes">
+                      <tr>
+                          <td>
+                              <center>Mandelbrot set</center>
+                              <canvas id="mandelbrot_canvas" width=297 height=198 data-call="setupMandelbrot" data-call-src="./AdvancedScripts_Images/Submit_Task1-4.js"></canvas>
+                          </td>
+                          <td>
+                              <center>Julia set</center>
+                              <canvas id="julia_canvas" width=198 height=198></canvas>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              <form>
+                                  <fieldset>
+                                      <h1>Color Scheme</h1>
+                                      <div>
+                                        <input type="radio" id="black &amp; white" name="colors" value="black & white" onclick="onChangeColorScheme();" checked>
+                                        <label for="black &amp; white"> black &amp; white</label><br>
+                                        <input type="radio" id="greyscale" name="colors" value="greyscale" onclick="onChangeColorScheme();">
+                                        <label for="greyscale"> greyscale colors</label><br>
+                                        <input type="radio" id="underwater" name="colors" value="underwater" onclick="onChangeColorScheme();">
+                                        <label for="underwater"> underwater colors</label><br>
+                                        <input type="radio" id="rainbow" name="colors" value="rainbow" onclick="onChangeColorScheme();">
+                                        <label for="rainbow"> HSV rainbow colors</label><br>
+                                      </div>
+                                  </fieldset>
+                              </form>
+                          </td>
+                          <td>
+                              <form>
+                                  <fieldset>
+                                      <h1>Maximum Iterations</h1>
+                                      <div>
+                                        <input type="range" id="slider" min="5" max="100" step="1" value="30" onchange="onChangeMaxIter(this.value);" />
+                                      </div>
+                                  </fieldset>
+                              </form>
+                          </td>
+                      </tr>
+                  </table></center>
+
+                  <subtask title="Compute the Mandelbrot Set" points=3 >
+                    <p>
+                        The simplest algorithm for visualization of the Mandelbrot set is the so-called <i>Escape Time Algorithm</i>, which uses a fixed amount of iterations to
+                        decide whether the sequence converges (i.e., \(c\) is inside the Mandelbrot set) or diverges (i.e., \(c\) is not inside the Mandelbrot set). The pixels
+                        corresponding to complex numbers inside the set are traditionally given black color, whereas the pixels corresponding to complex numbers not in the set
+                        are shaded white (see left picture).
+                    </p>
+                    <p>
+                        To produce such a picture, change function <code>mandelbrotSet()</code>. Some helper functions concerning complex numbers (<code>mult</code>, <code>add</code>,
+                        <code>sub</code>, <code>abs</code>) are already given in section <i>Complex Number Helpers</i>, along with two constructors for complex numbers:
+                        <code>ComplexNumber()</code> creates a new complex number with given real and imaginary part, <code>ComplexNumberFromCoords()</code> returns the
+                        corresponding complex number for a pixel in the canvas, assuming that the canvas represents the region \([-2,1]\times[-1,1]\) in the complex plane. The latter
+                        is already used in <code>mandelbrotSet()</code> to provide you with a usage example. Both constructors
+                        have to be called using <code>new</code>. Implement functions <code>f_c()</code> and <code>countIterations()</code>
+                        in section <i>Magic Math</i> and function <code>getColorForIter()</code> in section <i>Colors</i> and use them in <code>mandelbrotSet()</code> in section
+                        <i>Canvas Fillers</i> to obtain the result of the leftmost picture.
+                    </p>
+                  </subtask>
+
+                  <subtask title="Add Some Color" points=4 >
+                    <p>
+                        Once you are able to correctly visualize the Mandelbrot set, it is time to render the exterior of the Mandelbrot set in a more informative (and also more beautiful)
+                        way. Instead of using only the binary information about convergence/divergence for each pixel, one can easily adapt the coloration to represent <i>how fast</i> the
+                        sequence is diverging for a given \(c\). In the Escape Time Algorithm, this is equivalent to shading the pixels according to the number of iterations needed to meet
+                        the divergence condition. To do so, change function <code>getColorForIter()</code> according to the comments to support all four color schemes selectable from
+                        the radio buttons (see pictures at the top of the page for reference). The changes should only affect the exterior of the set; make sure the interior is always shaded 
+                        black. For the rainbow color scheme, use HSV colors and implement conversion to RGB colors in function <code>hsv2rgb()</code>.
+                    </p>
+                    <table style="margin-left:100px; margin-right:100px;" class="boxes">
+                        <tr>
+                            <td>
+                                <img src="AdvancedScripts_Images/withBands.png" />
+                                <center>Naive shading (banding effect)</center>
+                            </td>
+                            <td>
+                                <img src="AdvancedScripts_Images/withoutBands.png" />
+                                <center>Smooth shading</center>
+                            </td>
+                        </tr>
+                        <tr></tr>
+                    </table>
+                    <p>
+                        As you might have noticed, this kind of color picking results in ugly color bands. This effect gets even worse when you use the slider to reduce the number of
+                        iterations used for the Escape Time Algorithm (see picture above, left side). An easy way to mitigate this banding effect is to use a fractional rather than an
+                        integer iteration count. Take a look at <a href="http://linas.org/art-gallery/escape/smooth.html" target="_blank">this explanation</a> and change your code in function
+                        <code>countIterations()</code> accordingly.
+                    </p>
+                  </subtask>
+
+                  <subtask title="Investigate the Mandelbrot Set" points=2 >
+                    <p>
+                        So far, it is only possible to look at the whole set in the domain \([-2,1]\times[-1,1]\). To further investigate the fractal outline of the Mandelbrot set, you have
+                        to define event listeners to enable zooming and moving the complex plane.
+                    </p>
+                    <p>
+                        Three event listeners are involved in the moving process: <code>onMouseDown()</code>, <code>onMouseMove()</code> and <code>onMouseUp()</code> in section
+                        <i>Event Listeners</i>. Use the three handlers to enable choosing a point and dragging it somewhere else. To enable zooming by turning the mouse wheel, you
+                        only have to add the event listener <code>onMouseWheel()</code>, which is already given and zooms relatively to the center of the canvas.
+                    </p>
+                  </subtask>
+
+                  <subtask title="Add Julia Sets" points=1 >
+                    <p>
+                        Now the left <code>canvas</code> already shows the Mandelbrot set in all its glory, it is time to fill the right one with renderings of Julia sets. Unlike
+                        in the case of the Mandelbrot set, there is not only one Julia set: You can find one for each complex function! In this assignment, you will restrict yourselves to Julia sets
+                        emerging from the same function as the Mandelbrot set. This time, the set is formed by all complex numbers \(z\) for which the sequence \((z_n), n \in \mathbb{N}\)
+                        converges for a fixed \(c\). To sum up, the choices of \(z\) and \(c\) are:
+                        <ul>
+                            <li>
+                                Mandelbrot set: \(z = 0\) fixed, \(c\) chosen as pixel on screen
+                            </li>
+                            <li>
+                                Julia set: \(c\) fixed, \(z\) chosen as pixel on screen
+                            </li>
+                        </ul>
+                    </p>
+                    <p>
+                        <img src="AdvancedScripts_Images/Julia.png" width="200px" class="floatRight"/>
+                        Using this knowledge, change function <code>juliaSet()</code> in section <i>Canvas Fillers</i> to display the Julia set for the \(c\) stored in the global variable
+                        <code>juliaC</code>. The functions needed to perform the rendering have already been implemented in the last assignment. The result should look like the picture on
+                        the right (for 30 iterations and the rainbow color scheme).
+                    </p>
+                    <p>
+                        Once this works, you can choose a new \(c\) by holding the CTRL key pressed and clicking on the Mandelbrot canvas. This way, you can explore the
+                        relationship between the Mandelbrot set and this kind of Julia sets.
+                    </p>
+                  </subtask>
+                </task>
+              </exercise>
+            </content>
+    </page>
+</body>

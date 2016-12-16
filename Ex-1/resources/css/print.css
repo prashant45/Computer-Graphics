@@ -1,0 +1,462 @@
+/* FIX FOR BLURING DURING ANIMATIONS */
+body {
+    -webkit-transform: translateZ(0px);
+}
+
+@font-face {
+    font-family: MainUltraThin;
+    src: url(../Yantramanav-Thin.ttf);
+}
+
+@font-face {
+    font-family: MainThin;
+    src: url(../Yantramanav-Light.ttf);
+}
+
+@font-face {
+    font-family: MainMedium;
+    src: url(../Yantramanav-Medium.ttf);
+}
+
+@font-face {
+    font-family: Main;
+    src: url(../Yantramanav-Regular.ttf);
+}
+
+@font-face {
+    font-family: MainBold;
+    src: url(../Yantramanav-Bold.ttf);
+}
+
+@font-face {
+    font-family: HeaderRegular;
+    src: url(../PT_Sans-Web-Bold.ttf);
+}
+
+@font-face {
+    font-family: Code;
+    src: url(../SourceCodePro-Regular.ttf);
+}
+
+@font-face {
+    font-family: CodeLight;
+    src: url(../SourceCodePro-Light.ttf);
+}
+
+@font-face {
+    font-family: CodeMedium;
+    src: url(../SourceCodePro-Semibold.ttf);
+}
+
+header {
+
+}
+
+footer {
+
+}
+
+content {
+
+}
+
+# MAGIC BORDER
+# DO NOT CHANGE BELOW UNLSESS YOU KNOW WHAT YOU ARE DOING
+
+
+@page {
+    size: 21cm 29.7cm!important;
+    margin: 0!important; /* change the margins as you want them to be. */
+}
+
+body {
+  background: rgb(204,204,204);
+  font-family: mainThin, Arial, sans-serif;
+  font-size: 11pt;
+  padding: 0 !important;
+  margin: 5mm 0 0 0 ;
+  width: 100% !important;
+}
+
+page[size="A4"] {
+  opacity: 0;
+  display: table;
+  background: white;
+  width: 21cm;
+  height: 29.7cm;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+  page-break-after:always;
+}
+
+@media print {
+    body, page[size="A4"] {
+        height: 29.4cm!important;
+        margin: 0!important;
+        box-shadow: 0 0 0 white!important;
+    }
+
+    .button-primary{
+        display:none!important;
+    }
+
+    input {
+        border:0px solid white!important;
+    }
+}
+
+body, #content{
+  orphans:4;
+  widows:2;
+}
+
+content {
+  display:block;
+  margin:-0.5cm 0 0 0;
+  padding:0.0cm 2.0cm 1.0cm 2.0cm;
+  overflow-x:hidden;
+}
+
+header {
+  position: relative;
+  top:0px;
+  left:0px;
+  right:0px;
+  border-bottom: 1px solid silver;
+  padding:0 0 0 0;
+  margin:1.5cm 2.0cm 0 2.0cm;
+
+  font-family:mainThin;
+  height:auto;
+}
+
+header img {
+  margin-right:-23px;
+}
+
+footer {
+  position: relative;
+  bottom:0px;
+  left:0px;
+  right:0px;
+  border-top: 1px solid silver;
+
+  font-family:mainThin;
+  height:auto;
+  padding:0 0 0 0;
+  margin:0 2.5cm 1.5cm 2.5cm;
+}
+
+header table, footer table {
+  width:100%;
+}
+
+header table th, footer table th {
+  font-weight:normal;
+  text-align:left!important;
+  color:silver;
+}
+
+header table th lecture, footer table td {
+  padding-right: 1mm;
+  color:#fc351d; /* red */
+}
+
+header table td, footer table td {
+  text-align:right;
+}
+
+header table h1, footer table h1 {
+  font-size:1.2em;
+  margin:0;
+  margin-top:5.5mm;
+  margin-bottom:-0.5mm;
+  color:black;
+}
+
+header dueDate, footer dueDate  {
+  font-size: 0.9em;
+  font-weight: normal;
+  font-family: MainThin;
+  color:silver;
+}
+
+header dueDate b, footer dueDate b {
+  font-size: 11pt;
+  font-family: MainThin;
+  color:black;
+}
+
+exercise p, exercise table, exercise h2, exercise h3 {
+  padding-left:3mm;
+}
+
+exercise .floatLeft {
+  padding-left:0;
+  margin-left:3mm;
+}
+
+exercise task p, exercise task table, exercise task .floatLeft, exercise task h3 {
+  padding-left:6mm;
+}
+
+exercise task subtask ul, exercise task subtask ol {
+  padding-left:18mm;
+}
+
+exercise task ul, exercise task ol {
+  padding-left:12.5mm;
+}
+
+exercise task .floatLeft {
+  padding-left:0;
+  margin-left:6mm;
+}
+
+exercise task subtask p, exercise task subtask table {
+  padding-left:11mm;
+}
+
+
+
+exercise task subtask .floatLeft {
+  padding-left:0;
+  margin-left:11mm;
+}
+
+exercise task subtask h3 .enum {
+  display:inline-block;
+  width:4mm;
+}
+
+exercise h1 {
+  font-size:1.2em;
+  color:#808080 /* gray */;
+  margin-bottom:2mm;
+}
+
+exercise h1 strong {
+  font-size:1.2em;
+  font-family: inherit;
+  color:black;
+}
+
+exercise h2 {
+  font-size:1.0em;
+  color:#808080 /* gray */;
+  margin-bottom:1mm;
+}
+
+exercise h2 strong {
+  font-size:1.0em;
+  font-family: inherit;
+  color:black;
+}
+
+exercise h3, exercise h3 strong {
+  font-size:1.0em;
+  margin-bottom:0mm;
+}
+
+exercise h3 strong {
+  font-family: inherit;
+}
+
+exercise canvas, exercise img, exercise svg, exercise fieldset{
+  border:1px solid #808080 /* gray */;
+}
+
+exercise fieldset {
+  margin:0px;
+}
+
+exercise fieldset p, exercise fieldset div {
+  margin-left:3mm;
+  padding:0;
+}
+
+exercise fieldset h1 {
+  font-size:inherit;
+  font-family:MainMedium;
+  text-transform: uppercase;
+  margin:0px;
+  padding:0px;
+}
+
+
+exercise, task, subtask {
+  display: block;
+  clear:both;
+}
+
+task h2 {
+  margin-top: 5mm;
+}
+
+subtask h3 {
+  margin-top: 2mm;
+}
+
+b, strong{
+  font-weight: normal;
+  font-family: MainMedium;
+}
+
+
+
+h1, h2, h3, h4 {
+    page-break-after : avoid;
+    font-family: HeaderRegular;
+    font-weight: normal;
+}
+
+h1 {
+    margin-top:0.75cm;
+    margin-bottom:0.0cm;
+    font-size: 1.2em;
+}
+
+h2 {
+    margin-top:0.75cm;
+    margin-bottom:0.0cm;
+    font-size:1.1em;
+}
+
+h3 {
+  font-size: 11pt;
+}
+
+ul, ol {
+  margin-top:-0.2cm;
+}
+
+p, td, th {
+  margin-top: 0.0cm;
+  margin-bottom:0.2cm;
+  text-align:justify;
+  font-size: 11pt;
+}
+
+td, th {
+  vertical-align: top;
+}
+
+table {
+  width:100%;
+  margin-left:0;
+  margin-right:0;
+  border-spacing:0;
+}
+
+table.boxes {
+  border-collapse: separate!important;
+  border-spacing: 10px!important;
+  width:auto;
+}
+
+table.boxes img, table.boxes tr td img{
+  width:100%;
+}
+
+table.justifyContent tr td, table.justifyContent tr th, tr.justifyContent td, tr.justifyContent th, td.justifyContent, th.justifyContent {
+  text-align:justify;
+}
+
+table.centerContent tr td, table.centerContent tr th, tr.centerContent td, tr.centerContent th, td.centerContent, th.centerContent {
+  text-align:center;
+}
+
+table.leftAlignContent tr td, table.leftAlignContent tr th, tr.leftAlignContent td, tr.leftAlignContent th, td.leftAlignContent, th.leftAlignContent {
+  text-align:left;
+}
+
+table.rightAlignContent tr td, table.rightAlignContent tr th, tr.rightAlignContent td, tr.rightAlignContent th, td.rightAlignContent, th.rightAlignContent {
+  text-align:right;
+}
+
+li {
+  text-align:justify;
+  font-size:11pt;
+}
+
+ol {
+  list-style-type: lower-alpha;
+}
+
+keyword {
+  font-family: CodeLight;
+  font-size:11pt;
+}
+
+code b {
+  font-family: CodeMedium;
+}
+
+code {
+  font-family: Code;
+  font-size:11pt;
+  color:#0971B2; /* blue */
+}
+
+a{
+  color:#fc351d; /* red */
+  font-family:MainMedium;
+}
+
+a:visited {
+
+}
+
+.floatLeft {
+  clear:left;
+  float:left;
+  margin-right: 3mm;
+  margin-bottom: 2mm;
+}
+
+.clearLeft {
+  clear:left;
+}
+
+.clearRight {
+  clear:right;
+}
+
+.floatRight {
+  clear:right;
+  float:right;
+  margin-left: 3mm;
+  margin-bottom: 2mm;
+}
+
+
+overlayContainer {
+  position:relative;
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+overlayContainer img {
+  width:32px!important;
+  height:32px!important;
+  content: url(../spin.gif);
+  z-index: 100;
+  position:absolute;
+  right:2mm;
+  bottom:2mm;
+  border:0px solid white!important;
+}
+
+overlayContainer img.transitionHidden {
+  opacity:0;
+  -webkit-transition: opacity .5s ease-in-out;
+  transition: opacity .5s ease-in-out;
+}
+
+.transitionVisible {
+  opacity:1!important;
+  -webkit-transition: opacity .25s ease-in-out;
+  transition: opacity .25s ease-in-out;
+}
