@@ -1,0 +1,123 @@
+﻿
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./resources/css/print.css">
+
+    <meta name="lecture" content="Computer Graphics">
+    <meta name="exerciseNr" content="3">
+    <meta name="exercisePrefix" content="Exercise">
+    <meta name="term" content="Winter Term 2016/17">
+    <meta name="dueDate" content="November 07, 2016, 11:59 pm">
+
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script type="text/javascript" src="./resources/js/sheet.js"></script>
+</head>
+
+
+<body>
+
+    <page size="A4">
+            <content>
+              <exercise prefix="Advanced Exercises" title="Halfspace / Procedural Images" points=10>
+
+                  <task title="Triangle Clipping / Halfspaces" points=5>
+                      <canvas class="floatRight" id="canvasTriangleClipping" width=600 height=300 data-call="Advanced1.webGLStart" data-call-src="./AdvancedScripts/Advanced1.js"><img class="wait">
+                          <shader id="shader-vs-default" type="--vertex" src="./AdvancedScripts/shader_default.vs"></shader>
+                          <shader id="shader-fs-default" type="--fragment" src="./AdvancedScripts/shader_default.fs"></shader>
+                          <shader id="shader-fs-quadtriangle" type="--fragment" src="./AdvancedScripts/shader_quadtriangle.fs"></shader>
+                          <shader id="shader-fs-quadtriangleiso" type="--fragment" src="./AdvancedScripts/shader_quadtriangleiso.fs"></shader>
+                      </canvas>
+                      <subtask title="Triangle Clipping / Halfspaces" points=3 submitfile="shader_quadtriangle.fs">
+                          <p>
+                              In this task you are asked to implement a fragment shader that clips every pixel against a triangle that is defined by the uniforms <code>pointA</code>, <code>pointB</code> and <code>pointC</code>.
+                              The given code already renders a full size screen quad. To clip a pixel at the screen coordinates <code>gl_FragCoord</code>, you have to test against the three edges of the triangle.
+                              If the pixel is outside you have to discard the pixel, otherwise you give the pixel the color that is defined by the uniform <code>color</code>.
+                          </p>
+                      </subtask>
+
+                      <subtask title="Iso Lines / Signed Distance Functions" points=2 submitfile="shader_quadtriangleiso.fs">
+                          <p>
+                              In this task you are asked to adjust the fragment shader of the previous sub task, such that you can render iso lines in the inside of the triangle.
+                              An iso line contains the points that have the same distance to the contour of the triangle.
+                              We want to draw multiple iso lines, i.e. every iso line whose distance is a multiple of <code>14</code> pixels.
+                              Therefore you first have to compute the distance <code>d</code> of a pixel to the triangle contour.
+                              If the pixel is outside you discard the pixel, otherwise you compute the distance to the iso line. If it is in the range of <code>1</code> pixel we blend between the triangle color and the color of the iso line (black).
+                          </p>
+                      </subtask>
+                  </task>
+
+                  <task title="Procedural Images Reloaded" points=5>
+                      <p>
+                          The following task shows you the benefits of using WebGL and therefore the parallelism of the graphics card. In the first subtask, you should port your Mandelbrot generation code from <i>Advanced Exercises 1</i> to GLSL shader language. In 
+                          the second subtask, you should implement interaction (i.e., zooming in, moving around and changing the maximum iteration number) and study the improvements of the WebGL solution compared to the pure Javascript solution from the first 
+                          exercise sheet. In the third subtask, you should bring the Julia sets also already known from <i>Advanced Exercises 1</i> to life by adding a simple animation.
+                      </p>
+                      <center>
+                          <canvas id="canvasMandelbrot" width=600 height=400 data-call="Advanced2.webGLStartMandelbrot" data-call-src="./AdvancedScripts/Advanced2.js">
+                              <shader id="shader-vs-mandelbrot" type="--vertex" src="./AdvancedScripts/shader_mandelbrot.vs"></shader>
+                              <shader id="shader-fs-mandelbrot" type="--fragment" src="./AdvancedScripts/shader_mandelbrot.fs"></shader>
+                              <shader id="shader-vs-line" type="--vertex" src="./AdvancedScripts/shader_default.vs"></shader>
+                              <shader id="shader-fs-line" type="--fragment" src="./AdvancedScripts/shader_default.fs"></shader>
+                          </canvas>
+                          <div>
+                              <input type="range" id="slider" min="5" max="1000" step="1" value="30" onchange="Advanced2.onChangeMaxIter(this.value);" />
+                              <input type="checkbox" name="animation" value="anim"> show line and Julia set animation<br>
+                          </div>
+                          <canvas id="canvasJulia" width=400 height=400 data-call="Advanced2.webGLStartJulia" data-call-src="./AdvancedScripts/Advanced2.js">
+                              <shader id="shader-fs-julia" type="--fragment" src="./AdvancedScripts/shader_julia.fs"></shader>
+                          </canvas>
+                      </center>
+                      <subtask title="Mandelbrot Set Generation using WebGL" points="2" submitfile="shader_mandelbrot.fs">
+                          <p>
+                              Take a look at the shader files <code>shader_mandelbrot.vs</code> and <code>shader_mandelbrot.fs</code>.
+                              The vertex shader for visualization of the Mandelbrot set is very similar to the vertex shader
+                              used in the previous tasks of this exercise sheet, except for the fact that it also computes coordinates in the range \([0,1]\times[0,1]\) and passes them to the fragment shader for the Mandelbrot set
+                              evaluation.
+                          </p>
+                          <p>
+                              The fragment shader, however, contains all the functions you are already familiar with from <i>Advanced Exercises 1</i>. Two of them (<code>getColorForIter()</code> and <code>countIterations()</code>) need editing, as
+                              well as the main function, which should put it all together and sets <code>gl_FragColor</code> accordingly in the end. Find the respective <code>TODO</code>s in <code>shader_mandelbrot.fs</code> and add code to fill
+                              the upper canvas with the same image as in <i>Advanced Exercises 1</i>.
+                          </p>
+                      </subtask>
+                      <subtask title="Mandelbrot Set Interaction" points="2" submitfile="Advanced2.js, Advanced2.txt">
+                          <p>
+                              Now that the Mandelbrot evaluation happens in shader code, the right way to do the interaction known from <i>Advanced Exercises 1</i> is through uniform passing. Extend the event listeners already
+                              present in <code>Advanced2.js</code> by code for passing the uniforms <code>max_iter</code>, <code>center</code> and <code>zoom</code> to the Mandelbrot shader program. Appropriate <code>TODO</code>s
+                              will help you.
+                          </p>
+                          <p>
+                              As soon as you have enabled interaction, you will quickly notice that this version of Mandelbrot set visualization exhibits much higher performance: Even when using a high maximum iteration 
+                              count, interaction with the canvas is still possible without much of waiting.
+                              Note that the slider used to pick the iteration number for the Escape Time Algorithm does not only cover the interval \([5;100]\) like it did in <i>Advanced Exercises 1</i>, but
+                              features up to \(1000\) iterations. Once you have enabled zooming and navigation through uniform passing, you can zoom in much farther than you could in the Javascript version and still
+                              discover more and more detail thanks to the high iteration number. Briefly explain how this much higher iteration count is possible without loss of responsiveness when you use WebGL instead
+                              of pure Javascript! Put your explanation into <code>Advanced2.txt</code>.
+                          </p>
+                          <p>
+                              <object width="100%" type="text/plain" data="./AdvancedScripts/Advanced2.txt" border="1"></object>
+                          </p>
+                      </subtask>
+                      <subtask title="Julia Set Animation" points="1" submitfile="Advanced2.js, shader_julia.fs">
+                          <p>
+                              As a final step, fill the lower canvas with an image of a Julia set. To do so, implement the main function of the fragment shader in <code>shader_julia.fs</code> analogously to the main 
+                              function of the Mandelbrot fragment shader. The functions <code>getColorForIter()</code> and <code>countIterations()</code> can simply be copied from <code>shader_mandelbrot.fs</code>.
+                          </p>
+                          <p>
+                              By checking "show line and Julia set animation" you can display a line in the Mandelbrot canvas, which is used to change the <code>juliaC</code> used for the generation of shader code.
+                              You can draw a new line by holding the CTRL key pressed and using the left mouse key. To let the complex number <code>juliaC</code> move across the complex plane along the drawn line, 
+                              pass the appropriate uniform to the Julia shader. Once you are done, you can generate a mesmerizing Julia set animation for every line you draw!
+                          </p>
+                      </subtask>
+                  </task>
+
+              </exercise>
+            </content>
+    </page>
+</body>

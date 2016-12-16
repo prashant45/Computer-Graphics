@@ -1,0 +1,409 @@
+<!--
+    JavaScript:	Embed script(s) with auxiliary functions
+-->
+<script type="text/javascript" src="../AdvancedScripts/helper.js"></script>
+<script id="shader-vs" type="--vertex">
+    ////////////////////////////////////////////////////////////////////////
+    // GL: 	 The attributes are the "interface" with your application
+    // 		The data that is stored in a buffer contains multiple vertices.
+    // 		Each shader instance has acces to the data of one vertex
+    //
+    // 		Imagine a parallel for loop where each vertex is identified
+    //		with a "gl_VertexID"
+    // 		and the	 positions are assigned as follows:
+    // 		CONST vec2& vVertex = vertices[gl_VertexID].position
+    ////////////////////////////////////////////////////////////////////////
+    attribute vec2 vVertex;
+
+    void main(void)
+    {
+    gl_Position = vec4(vVertex, 0.0, 1.0);
+    }
+</script>
+<script id="shader-fs" type="--fragment">
+    precision mediump float;
+
+
+    void main(void)
+    {
+    gl_FragColor = vec4(1,0,0, 1.0);
+    }
+</script>
+<script type="text/javascript">
+    ////////////////////////////////////////////////////////////////////////
+    // JavaScript: 	This is an arbitrary class to store 2D triangles
+    //				We have encapsuled some gl calls for uploading and
+    //				rendering
+    //
+    //				the vertices are opaque, we do not care if they have
+    //				positions/colors...
+    //				This information is crucial when conficuring the draw call
+    ////////////////////////////////////////////////////////////////////////
+    function TriangleStrip2D(vertices, indices) {
+        this.vertices = vertices;
+        this.indices = indices;
+        this.dirty = true;
+    };
+
+    ////////////////////////////////////////////////////////////////////////
+    // JavaScript/ GL: 	The data must be uplaoded to GPU via buffers
+    //					the triangle specific data is stored in a array buffer.
+    //					Note that "vbo" starts out as a generic buffer.
+    //					We bind it to a slot "ARRAY_BUFFER" and define the buffer
+    //					via !! this slot. "ARRAY_BUFFER" is GL slang for
+    //					vertex buffer. Another slot is the "ELEMENT_ARRAY_BUFFER."
+    //					that defines the index buffer.
+    //
+    //					Once a buffer is bound to a slot we can transfer the
+    //					TriangleStrip2D data as consecutive float array.
+    //					Note that the contents and the setup of the buffer is
+    //					inconsequential. It will be interpretet in the draw
+    //					function.
+    ////////////////////////////////////////////////////////////////////////
+    TriangleStrip2D.prototype.initBuffers = function (gl) {
+        this.vbo = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
+        var v = [].concat(...this.vertices);
+
+        console.log("vertices size: " + v.length);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(v), gl.STATIC_DRAW);
+
+        this.ibo = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.ibo);
+        var i = indices;
+        var ui = new Uint32Array(i);
+        console.log("indices size: " + i.length);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(i), gl.STATIC_DRAW);
+    };
+
+
+    ////////////////////////////////////////////////////////////////////////
+    // GL: 	The drawing of data requires a shader program. !!!!!!
+    //		This is	trivial for a single shader setup but there will be other
+    //		assignments where you have to switch them for each primitive.
+    //
+    //		Once a shader is bound it will remain so.
+    // 		If we repeat the drawing function every frame it will continue with
+    //		the last bound shader.
+    //
+    //		Some of you will forget this and wonder why the colors are not
+    //		what you intend.
+    //		Be aware that GL is a state machine: There are slots that you can
+    //		bind buffers and programs to.
+    //		These buffers and states and programs will remain bound until
+    //		we define otherwise. You will often have to retrace EVERY line
+    // 		of your code to identify the place where you missed to swap states.
+    ////////////////////////////////////////////////////////////////////////
+    TriangleStrip2D.prototype.draw = function (gl, shaderProgram) {
+
+        ////////////////////////////////////////////////////////////////////////
+        // GL: 	The Shader used for drawing requires data, specifically the
+        // 		vertex positions.
+        //		The slot / statemachine  priniciple  applies here as well.
+        //		The shader reads from the "ARRAY_BUFFER" and
+        //		"ELEMENT_ARRAY_BUFFER". It is up to us to bind a buffer
+        //		containing meaningful data. GL is perfectly OK with rendering
+        //		unitialized/ nonsense data.
+        ////////////////////////////////////////////////////////////////////////
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.ibo);
+
+        var stride = 4 * (2);
+        var offsetPositions = 0;
+        var offsetColor = 4 * 2;
+
+        ////////////////////////////////////////////////////////////////////////
+        // GL: 	 The definition of attributes is the connection between
+        //		aplication data and the shader.
+        //		The buffer "vbo" contains the data of "TriangleStrip2D.vertices",
+        //		which is basically an array of structs.
+        //
+        //		struct Vertex
+        //		{
+        //			vec2/3 position;
+        //			vec3 normal;
+        //			vec3 color;
+        //		}
+        //
+        //		Each struct member(or pair of floats) is an attribute for
+        //		the shader.
+        ////////////////////////////////////////////////////////////////////////
+        gl.vertexAttribPointer(
+        shaderProgram.vertexPositionAttribute,	// the index/position of the
+                                                // attribute in the shader
+        2, 				// The number of individual values of the attribute
+                        // 	(we use 2D positions for now)
+        gl.FLOAT, 		// Data type of individual attribute values, can be
+                        // 	float/int/short ...
+        false, 			// If type integer the shader can interpret them as floats
+                        // 	between [-1,1] for int and [0,1] for unsigned int,
+                        // 	useful for normals
+        stride, 		// This is important! how many byte is one vertex, e.g.
+        offsetPositions	// When we add multiple attributes we have to indicate
+                        // 	the offset to the float values belonging to next attributes
+        );
+
+
+        ////////////////////////////////////////////////////////////////////////
+        // GL:	Rendering of data is independent of the actual data	 and uses
+        //		predefined slots for shaders and buffers (and render targets).
+        //		The following DRAW CALL starts a pipeline for 3 vertices.
+        // 		It will execute the vertex shader 3 times and combine them to a triangle.
+        // 		The data is acessed directly from the vbo, without the indirection of indices
+        //
+        //		There are many, many (many many) ways to draw a triangle and all
+        //		are improvements that reduce redundancy and memory transfer.
+        //
+        ////////////////////////////////////////////////////////////////////////
+        gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_INT, 0);
+    };
+
+    function initShaders(gl) {
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // JavaScript/
+        // GL: 		read source, attach to shader (VS/FS) compile, check for errors
+        ///////////////////////////////////////////////////////////////////////////////////////
+        var fragmentShader = getShader(gl, "shader-fs");
+        var vertexShader = getShader(gl, "shader-vs");
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // GL:  shaders are part of a pipeline in GL we refer to the pipeline as program.
+        //		Don't put to much importance on the words but understand the principle.
+        ///////////////////////////////////////////////////////////////////////////////////////
+        var shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertexShader);
+        gl.attachShader(shaderProgram, fragmentShader);
+        gl.linkProgram(shaderProgram);
+
+        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // GL:  To use the pipeline for rendering we have to explicitly bind it
+        //  	Such feature seems useless for our purpose of rendering a single triangle, but
+        //		We can bind different shaders for different purposes.
+        ///////////////////////////////////////////////////////////////////////////////////////
+
+        gl.useProgram(shaderProgram);
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // GL:  Shaders are arbitrary programs that are more or less independent from the data we
+        // 		want to render and the JavaScript code we see here.
+        //
+        // 		To use the shader for rendering we have to provide a "data interface" with our
+        //		implementation and our "TriangleStrip2D".
+        //
+        //		The common way to access data within the shader is via attributes.
+        // 		When rendering a triangle, we require 3 vertices (which means 3 vertex shader
+        //		invocations with different data).
+        //		The vertex data is made available via attributes. A vertex can have multiple
+        //		attributes (position, color, normal, texcoord, etc.) but each attribute must be
+        //		enabled (this seems annoyingly useless and intransparent and todays there are more
+        //		explicit ways todays but we have to set up our GPU somehow).
+        //
+        //		The "attribute(s)" is(are) one of three connections between the shader code and our
+        //		application.
+        //		Note that we have to search for a string "vVertex" in the vertex shader and store
+        //		the location of the attribute in "vertexPositionAttribute".
+        //		This variable is completely arbitrary, check function "TriangleStrip2D.prototype.draw"
+        //		Where we use it to actually tell our vretex shaders where the data can be found.
+        ///////////////////////////////////////////////////////////////////////////////////////
+        shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "vVertex");
+        gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+
+        return shaderProgram;
+    }
+
+    var shaderProgram;
+
+    var triangle;
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // JavaScript: 	We prepare the rendering data.
+    // 				We draw a single triangle onto the screen.
+    //				Note that the positions are within the boundaries of [-1,1].
+    //				VISIBLE VERTICES MUST BE WITHIN [-1,1].
+    //				By that we mean the final vertex position that you hand to	"gl_Position".
+    //
+    // 				There is something called a transformation pipeline that we use to look at
+    //				arbitrary geometry. However, you will still only see triangles that are
+    //				transformed into these boundaries.
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    function initScene(gl) {
+
+        var ext = gl.getExtension("OES_element_index_uint");
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // JavaScript: use [], curly braces {} are not working (not iterable)
+        ///////////////////////////////////////////////////////////////////////////////////////
+        var p0 = [-.5, -.5];
+        var p1 = [.5, -.5];
+        var p2 = [0, .5];
+
+        vertices = [p0, p1, p2];
+
+        indices = [0, 1, 2];
+
+        // triangle
+        triangle = new TriangleStrip2D(vertices, indices);
+        triangle.initBuffers(gl);
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // GL:		This function is used to encapsulate "drawArrays", we can extend it to
+    //			draw other primitives
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    function drawScene(gl) {
+
+        // set viewport and clear framebuffer
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // GL:			The slot/ state machine requires a "viewport"
+        //				the	viewport maps the range  [-1,1] where vertices are placed (NEVER FORGET
+        //				THIS REQUIREMENT) to your window resolution [width, height]
+        //				the mapping will always happen. If you forget do define the viewport,
+        //				GL maps nonsense
+        //
+        // JavaScript:	viewportWidth/viewportHeight is NOT a member of GL, we just added it
+        //				to the context for convenience sake (Because JavaScript allows for such
+        //				idiocy)
+        ///////////////////////////////////////////////////////////////////////////////////////
+        gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // GL:		The rendertarget or framebuffer is the "canvas" to which we render.
+        //			It is either unitialized or filled with the contents of the previous frame.
+        //			We must clear it explicitly.
+        ///////////////////////////////////////////////////////////////////////////////////////
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        // draw scene
+        triangle.draw(gl, shaderProgram);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // JavaScript: "gl" is the canvas context "extracted" from the canvas
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+    function initGL(canvas) {
+        console.log("initGL");
+        var gl;
+        try {
+            gl = canvas.getContext("experimental-webgl");
+
+            var glVersion = gl.getParameter(gl.VERSION);
+            var glslVersion = gl.getParameter(gl.SHADING_LANGUAGE_VERSION);
+            var glVendor = gl.getParameter(gl.VENDOR);
+            var glRenderer = gl.getParameter(gl.RENDERER);
+
+            gl.viewportWidth = canvas.width;
+            gl.viewportHeight = canvas.height;
+        } catch (e) {
+        }
+        if (!gl) {
+            alert("Could not initialise WebGL, sorry :-(\nTo enable WebGL support in your browser, go to about:config and skip the warning.\nSearch for webgl.disabled and set its value to false.");
+        }
+        return gl;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // JavaScript: Entry function for our program, similar to main (in fact we could
+    //	rename it)
+    ///////////////////////////////////////////////////////////////////////////////////////
+    function webGLStart(canvas) {
+        console.log("GL", canvas)
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // JavaScript: 	We need to get a "window" into which we can draw, is unrelated to GL
+        //
+        ///////////////////////////////////////////////////////////////////////////////////////
+
+        // initialize webGL canvas
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // JavaScript: "gl" is the canvas context "extracted" from the canvas
+        // 			  	JavaScript is horrible in the way it encapsulates data, there are
+        //				no classes, in the web you will find tutorials where  the gl context
+        //				is made global we have decided to pass et as attribute for no reason
+        //				whatsoever
+        ///////////////////////////////////////////////////////////////////////////////////////
+        gl = new initGL(canvas);
+
+        // init scene data
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // JavaScript/
+        // Exercise Design:	the primitives we are about to render must be created and sent
+        //					to the GPU, the data is encapsulated in "TriangleStrip2D" and our
+        // 					choice of implementation is absolutely arbitrarry
+        //
+        // 					You wil notice a member variable "vbo" this is a "pointer"/ handle
+        //					to which we bind the triangle data on the GPU.
+        //					This handle is absolutely uselsess for CPU debugging, it as no
+        //					attached member variables, read more in TriangleStrip2D.
+        ///////////////////////////////////////////////////////////////////////////////////////
+        initScene(gl);
+
+
+
+        // init scene data
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // GL:	Shaders are fundamental to rendering.
+        //		They are a program in themselves and absolutely independent of your JavaScript
+        // 		or C++ code.
+        //
+        //		Shaders are independent source codes that are parsed as strings/char sequences.
+        //		They can be defined inside the application or stored in a file
+        //		(That you will have to parse and convert to string.)
+        //		Have a look at the "hideGLStuff.js" file to get an idea what happens:
+        //		Basically: we create a shader, stuff it with code and compile!
+        //		The shaderes are combined in a shaderprogram (can be understood as
+        //		rendering pipeline)	and the program is linked or initiallied
+        //
+        //		This information is probably rather useless at the moment but if you begin to
+        //		curse shader programming as you inevitably will, have  a look at these functions
+        // 		"getShaderInfoLog(shader)" and "getProgramParameter(shaderProgram, gl.LINK_STATUS)".
+        //		Whenever your shader fails to compile you get the reason why from here.
+        //
+        //		To render we need a vertex and a fragment shader.
+        // 		The vertex shader is executed for every point of your triangle and allows!! you
+        //		to define a position "gl_Position" that the GPU interprets as a vertex position.
+        //		Three consecutive vertex positiones are used to create a triangle. The triangle is
+        //		rasterized (laid on a grid) and for each grid sample the GPU produces a fragment.
+        //		The fragment shader allows!! you to	define a color "out vec4 ..."
+        //
+        //		For shaderes to function they need to be "interfaced" with your JavaScript/ C++
+        //		application. We have to feed them with data, namely the TriangleStrip2D points.
+        //		Have a look at "TriangleStrip2D::initBuffers,updateBuffers" where we explain about buffers
+        //		and how to transfer data to the GPU.
+        //		(If you just did or if you will after this, notice that such buffers are just pieces
+        //		of data and have no connection to shaders.)
+        //
+        ///////////////////////////////////////////////////////////////////////////////////////
+        shaderProgram = new initShaders(gl);
+
+        // set clear color and disable depth test
+        gl.clearColor(1.0, 1.0, 1.0, 1.0);
+        gl.disable(gl.DEPTH_TEST);
+
+        // start render loop
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // GL:
+        ///////////////////////////////////////////////////////////////////////////////////////
+        drawScene(gl);
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // JavaScript: 	invoking the entry function of the script
+    //				not the only way to do it, we do it because of our document structure
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    webGLStart(window.parent.document.getElementById('canvasTriangleConfusing'));
+</script>

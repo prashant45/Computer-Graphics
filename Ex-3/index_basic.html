@@ -1,0 +1,307 @@
+﻿<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./resources/css/print.css">
+
+    <meta name="lecture" content="Computer Graphics">
+    <meta name="exerciseNr" content="3">
+    <meta name="exercisePrefix" content="Exercise">
+    <meta name="term" content="Winter Term 2016/17">
+    <meta name="dueDate" content="November 07, 2016, 11:59 pm">
+
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script type="text/javascript" src="./resources/js/sheet.js"></script>
+
+    <script type="text/javascript" src="./AdvancedScripts/helper.js"></script>
+
+</head>
+
+
+<body>
+
+
+    <page size="A4">
+        <content>
+            <exercise prefix="Basic Exercises" title="WebGL Introduction" points="10">
+                <figure>
+                    <center>
+                        <canvas id="canvasTriangle" width="250" height="250" data-call="webGLStart" data-call-src="./BasicScripts/webGL_Triangle.js">
+                            <shader id="shader-vs" type="vertex" src="./BasicScripts/shader.vs"></shader>
+                            <shader id="shader-fs" type="fragment" src="./BasicScripts/shader.fs"></shader>
+                        </canvas>
+
+						<canvas id="canvasTriangleConfusing" width="250" height="250"></canvas>
+                         <embed src="./BasicScripts/webGL_Triangle_Confusing.html"></embed>
+
+                        <figcaption>
+                            Two example programs: On the <a href="./BasicScripts/webGL_Triangle.js">left</a> is the script from the lecture.
+                            On the right you will find a slightly more confusing script (that you will have to open in a text editor).
+                        </figcaption>
+                    </center>
+                </figure>
+
+                <h2>OpenGL in General</h2>
+
+                <p>
+                    With this assignment we introduce you to OpenGL, or rather a specific version called WebGL.
+                    GL comes in many flavours, there is the "original" OpenGL from versions 1 to 4.5 (and counting), there is OpenGL ES for embedded systems such as smartphones, and WebGL which is basically OpenGL ES 2.0.
+                    Such diversity will annoy you greatly, as it allows you to do the same thing in many different ways, most of which are old and inefficient but still supported -
+                    either because people are too lazy to learn the better way or because the hardware devices do not support it yet or never will (I'm looking at you, WebGL and old smartphones.).
+                </p>
+                <p>
+                    The redeeming benefit of OpenGL and specifically WebGL is the ease of access.
+                    If you know your way around Google, you can create small applications very quickly.
+                </p>
+                <p>
+                    At this point you should have a look at the function <code>webGLStart()</code>.
+                    Read it carefully and step through the code line by line. Then read it again and again.
+                    You should also bookmark <a href="https://www.khronos.org/opengles/sdk/docs/man/xhtml/">https://www.khronos.org/opengles/sdk/docs/man/xhtml/</a>
+                    and google every GL call, starting with <a href="https://www.google.de/search?q=glgetParameter&ie=utf-8&oe=utf-8&client=firefox-b-ab&gfe_rd=cr&ei=pPH0V6j2F4OAiAbUhojADQ#q=gl+get+Parameter">glGet</a>
+                    and ending with  <a href="https://www.google.de/search?q=glgetParameter&ie=utf-8&oe=utf-8&client=firefox-b-ab&gfe_rd=cr&ei=pPH0V6j2F4OAiAbUhojADQ#q=gl+drawArrays">glDrawArrays</a>.
+                    You should know the API by heart after a year or so.
+                </p>
+                <p>
+                    Note that this and the following assignments are just additional tutorials and you can find very similar problems on the
+                    <a href="https://www.google.de/search?q=opengl+tutorial&ie=utf-8&oe=utf-8&client=firefox-b-ab&gfe_rd=cr&ei=603_V8nKI_SP8QfRiI3gDw">internet</a>.
+                    We want to give you a jump start from which you can begin to explore additional features that we cannot cover in the scope of this lecture.
+                    However, you are well advised to refrain from copying the existing code, as  you will  make your life harder when you begin to tackle less well documented problems.
+                </p>
+
+                <!-- ------------------------------------------------------------------------------------------------------------- -->
+
+                <figure>
+                    <center>
+                        <img src="resources/images/vbo.svg" alt="Triangle degenerate Triangle">
+                        <figcaption>The vertices and indices of a simple triangle.</figcaption>
+                    </center>
+                </figure>
+
+                <p>
+                    The canvas at the top  shows the simplest rendering of a triangle that is possible using GL (almost - 
+                    a minimalistic solution would contain only vertices).
+                    The addition of the <b>index buffer</b> is an optimization to save memory storage, which allows us to reuse vertices without storing their coordinates again and again.
+                    Instead of storing the positions of vertex  v<sub>0</sub> three times, we store it once and identify the position via an index.
+                    If you do the math, you see that we need only 1&frasl;9 of the memory requirement of the original 3 component vector.
+                </p>
+
+
+                <task title="Rasterize a Circle using an Indexed Face Set" points="2" submitfile="webGL_Circle.js">
+                    <figure>
+                        <center>
+                            <img src="resources/images/circle.svg" height="150" alt="circle">
+                            <img src="resources/images/circleStrip.svg" height="150" alt="circle">
+                            <figcaption>
+                                Construction schematics for a circle using triangles.
+                                Left: Use a loop to traverse the circle periphery and create circle slices using triangles.
+                                Right: Create a single <bf>triangle strip</bf> around the center vertex.
+                                <b>Note: The winding should be the other way around!</b>
+                            </figcaption>
+                        </center>
+                    </figure>
+
+                    <figure class="floatRight">
+                        <center>
+                            <canvas id="canvasCircle" width="200" height="200" data-call="webGLStart" data-call-src="./BasicScripts/webGL_Circle.js">
+                                <shader id="shader-vs" type="vertex" src="./BasicScripts/shader.vs"></shader>
+                                <shader id="shader-fs" type="fragment" src="./BasicScripts/shader.fs"></shader>
+                            </canvas>
+                            <figcaption>
+                                Canvas for indexed face set circle.
+                            </figcaption>
+                        </center>
+                    </figure>
+
+                    <p>
+                        Using triangles, we can draw everything, provided we have the data, of course.
+                        We start with a circle.
+                        The result should be similar to the <code>arc()</code> and <code>SVG</code> circles you know from the first assignment.
+                        Obviously we have to create the circle using triangles.
+                        Above you see a schematic of how to achieve just that.
+
+                    </p>
+
+                    <p>
+                        Draw a circle and allow for an arbitrary (!) center point.
+                        Define the center at C = [0, 0].
+                        Define the radius with r = 0.8 .
+                        <ul>
+                            <li>
+                                Create the circle geometry using a <code>for</code> loop in the provided function.
+                            </li>
+                            <li>
+                                Store the vertex data once and duplicate the center vertex using its index.
+                            </li>
+                            <li>
+                                Do not store the first and last vertex twice (or any other vertex, for that matter).
+                            </li>
+
+                        </ul>
+                    </p>
+                </task>
+
+                <task title="Barycentric Coordinates, Attributes \& Wireframe Shader" points="4" submitfile="webGL_Wireframe.js, shaderWireFrame.vs, shaderWireFrame.fs">
+
+                    <figure class="floatRight">
+                        <center>
+                            <canvas id="canvasWireframe" width="200" height="200" data-call="webGLStart" data-call-src="./BasicScripts/webGL_Wireframe.js">
+                                <shader id="shaderWireFrame-vs" type="vertex" src="./BasicScripts/shaderWireFrame.vs"></shader>
+                                <shader id="shaderWireFrame-fs" type="fragment" src="./BasicScripts/shaderWireFrame.fs"></shader>
+                            </canvas>
+
+                            <figcaption>
+                                Canvas for barycenter triangle.
+                            </figcaption>
+                        </center>
+                    </figure>
+
+                    <p>
+                        Geometry is data with meaning. The rendering pipeline interprets the positions as vertices, creates a triangle and colors the fragments, but we can do much, much more.
+
+                        A central property of geometry are so called <b>vertex attributes</b>, which is a GL slang for vertex specific data.
+                        The <b>position</b> is such an attribute, but also the vertex <b>color</b>.
+                        The difficult part is the explicit setup of our GPU (specifically our rendering pipeline) so that it can interpret the geometry correcly.
+
+                        The vertex buffer is a linear array that contains the position (so far) as well as some vertex colors (in this assignment).
+                        However, the rendering pipeline sees a data blob and it is up to us to configure it correctly.
+                        This must be done in several places:
+
+                        <ol>
+                            <li>
+                                The shader: <br>We must add an attribute of type <code>vec3</code> and name it appropriately: <code> attribute vec3 vBarycenter</code>.
+                            </li>
+                            <li>
+                                The shader setup: <br> We must enable the additional attribute specifically  and query its name from the shader.
+                            </li>
+                            <li>
+                                The draw call: <br> We must define the format and the layout of the attribute.
+                                Consider the vertex buffer an <b>array of structs</b>, where each vertex gets its own data/struct from the pipeline.
+                                The struct layout must be defined explicitly including the index of stride/size of the struct (Where does the next struct begin?), the type of each struct member (for example <code>float</code>), the number of <code>float</code> elements (here: 2 positions and now 3 barycentric coordinates) and the offset of each struct member within the struct (there is no such thing as a class member that we can use to identify the individual attributes, instead we must tell the pipeline the offset in bytes to the desired member attribute).
+
+                            </li>
+                        </ol>
+                    </p>
+
+                    <p>
+                        If you have configured the attribute correctly you will see a colorful triangle.
+                        The colors are computed/ interpolated by the rendering pipeline.
+                        The pipeline works as follows:
+
+                        <ol>
+                            <li>
+                                The vertex shader:  <br>
+                                For every draw call, the GPU creates a number of vertices.
+                                Each vertex issues an execution of a (hopefully correcly programmed and configured) vertex shader.
+                                The vertex shader evaluates the attributes and places the vertex for additional processing via <code>gl_Position</code>.
+                            </li>
+                            <li>
+                                The primitive assembly: <br>
+                                The pipeline creates actual geometry from the vertices using pairs of 3 to create triangles.
+                                However, we can attach some <b>variables</b> to the vertices using  the  <code>varying</code> keyword.
+                                Do not confuse them with the <b>attributes</b> that "enter" the vertex shader.
+                                The varyings allow it to send data to the fragment shader.
+                            </li>
+                            <li>
+                                The rasterization: <br>
+                                The triangles that are produced by the primitive assembly are turned into fragments (Do not confuse fragments with pixels. A pixel is one element of your window, whereas a fragment is a piece of triangle that is used to shade the pixel. If many triangles cover the same pixel, we have multiple fragments per pixel.).
+                                The rasterization also <b>interpolates</b> the  <b>variables</b> declared with <code>varying</code>.
+                                A fragment very close to vertex v<sub>0</sub> will get the most weight from it.
+                                A fragment in the center of a triangle will average the interpolated data.
+                            </li>
+                            <li>
+                                The fragment shader:<br>
+                                The fragments that are produced by the rasterization can be shaded via programmable shaders.
+                                To do this meaningfully we can receive the interpolated variables that we defined in the vertex shader by declaring them again (The declaration must be identical).
+                            </li>
+
+                        </ol>
+                    </p>
+
+                    <p>
+                        The colors that you see actually contain the <a href="https://en.wikipedia.org/wiki/Barycentric_coordinate_system#/media/File:TriangleBarycentricCoordinates.svg">barycentric coordinates</a> used for interpolation.
+                        As such, we can abuse them to display a wire frame of the triangle(s) by discarding all fragments that lay outside a threshold from the edges.
+                    </p>
+
+                </task>
+
+
+                <task title="Rasterize a Circle by Cutting from a Quad" points="4" submitfile="shaderCircleFromQuad.fs, webGL_CircleQuad.js">
+
+                    <figure class="floatRight">
+                        <center>
+                            <canvas id="canvasCircleFromQuad" width="200" height="200" data-call="webGLStart"
+                                    data-call-src="./BasicScripts/webGL_CircleQuad.js">
+                                <shader id="shaderCircleFromQuad-vs" type="vertex" src="./BasicScripts/shaderCircleFromQuad.vs"></shader>
+                                <shader id="shaderCircleFromQuad-fs" type="fragment" src="./BasicScripts/shaderCircleFromQuad.fs"></shader>
+                            </canvas>
+                            <figcaption>
+                                Canvas for circle from quad <br> using a fragment shader.
+                            </figcaption>
+                        </center>
+                    </figure>
+
+                    <p>
+                        Data transfer between <b>GPU</b> and <b>CPU</b>, or between your <b>javascript</b> and <b>shader code</b> is a fundamental necessity.
+                        The previous assignment introduced <code>attributes</code>, which are <b>vertex specific data</b>, and <code>varyings</code>, which are created in the pipeline to compute <b>fragment specific data</b>.
+                        There is a third option, so called <code>uniforms</code>. Those values are <b>constant</b> for all vertices and fragments.
+                        In other words: The small shader programs that are executed for each vertex do the same stuff using different data (vs: attribute data, fs: varying data).
+                        But some data does not have to be stored once for every vertex but is the same for all vertices and fragments.
+                        This universal information can be send to the shaders by declaring a <b>global</b> shader variable as <code>uniform</code>.
+                        This variable must be <a href="https://www.google.de/search?q=glgetuniformlocation">searched</a> for in the shader.
+                        Once we have its location we can  <a href="https://www.google.de/search?q=uniform[1234][fi][v]">"assign"</a> data to this location.
+                        Note that you must manage the data types yourself, WebGL does not care if you are not careful.
+                    </p>
+
+                    <p>
+                        So far we have created a circle using triangles, many triangles.
+                        Now we consider the storage requirement for our explicitly rendered circles and compare it with the actual information that is necessary to render a cirle, namely the center c and the radius r, and we have to admit that the triangles are inelegant.
+                    </p>
+                    <p>
+                        Our next exercise renders the circle using a fragment shader.
+                        Instead of many triangles we render a single screen space aligned <b>quad</b>
+                        (That means that the coordinates of the quads go from [-1,-1] to [1,1].).
+                        The quad is rasterized and can be shaded using the shader <a href="./BasicScripts/shaderCircleFromQuad.fs"><code>shaderCircleFromQuad.fs</code></a>.
+
+                        Currently, we shade everything red.
+                        We want you to render a <b>smooth</b> circle by removing all pixels that are outside the circle radius <code>r</code> using <a href="https://www.google.de/search?q=glsl+discard"><b>discard</b></a>.
+                    </p>
+                    <p>
+                        Draw a circle around the center of the quad. Define the radius with r = .8.
+                        Define a smooth margin for anti-aliasing of .01.
+                        <ul>
+                            <li>
+                                Create a <b>uniform</b> variable <code>vec2 canvasSize</code> and search for its location in your javascript application.
+                                Beware, if you do not use the variable in your shader it will be optimized away and you cannot find it
+                                (You can log the location.).
+                                Transmit the canvas size to the shader uniform.
+                            </li>
+                            <li>
+                                Map the fragment coordinate <code>gl_FragCoord.xy</code> into the range [-1,1].
+                                You can debug the color via <code>gl_FragColor = vec4(abs(uv,0,1.0));</code>.
+                            </li>
+                            <li>
+                                Discard all fragments outside the radius; color all fragments inside with red.
+                            </li>
+                            <li>
+                                Reduce the opacity for all fragmens inside <code>
+                                    [r - smoothMargin, r]</code>
+                                        .
+                                        You can use the glsl function <a href="https://www.google.de/search?q=glsl+clamp"><b>clamp</b></a>.
+                            </li>
+
+                        </ul>
+                    </p>
+
+                </task>
+
+                <!-- ------------------------------------------------------------------------------------------------------------- -->
+                <!-- ------------------------------------------------------------------------------------------------------------- -->
+
+            </exercise>
+        </content>
+    </page>
+</body>
